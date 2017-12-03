@@ -66,7 +66,19 @@ It's important to realize that you are responsible for what get's rendered to yo
 
 
 ## Use nodejs API
-See `examples/simple` for a basic react application setup with `SSR3000`
+So you have installed `ssr3000` and setup the webpack configuration? 
+For setting up a dev-server with hot-reloading you just need a script to watch your application:
+```
+import ssr3000 from 'ssr3000';
+import clientConfig from './webpack.client.config';
+import serverConfig from './webpack.server.config';
+
+const SSR3000 = ssr3000();
+
+SSR3000.watch('0.0.0.0', 9999, clientConfig, serverConfig); 
+```
+
+For more information see `examples/simple` for a basic react application setup with `SSR3000`
 
 ## Use CLI
 example comming soon
