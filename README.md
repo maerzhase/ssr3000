@@ -79,9 +79,10 @@ It's important to realize that you are responsible for what get's rendered to yo
 
 
 ## Use nodejs API
-
+See `examples/simple` for a basic react application setup with `SSR3000`
 
 ## Use CLI
+example comming soon
 
 
 ## Configuration
