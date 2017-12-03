@@ -1,7 +1,9 @@
 /examples/
 !./lib
 .eslintrc
+.eslintignore
 .babelrc
 .gitignore
 IDEAS.md 
 /src/
+.npmignore
