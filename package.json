@@ -37,7 +37,6 @@
   },
   "dependencies": {
     "chalk": "^2.3.0",
-    "clean-webpack-plugin": "^0.1.17",
     "compression": "^1.7.1",
     "express": "^4.16.2",
     "react-dev-utils": "^4.2.1",
