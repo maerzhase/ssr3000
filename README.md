@@ -13,7 +13,6 @@ A typical __client entry__ file will look similar to this:
 ```
 import React from 'react';
 import { hydrate } from 'react-dom';
-import { AppContainer } from 'react-hot-loader';
 import App from './components/App';
 
 hydrate(
