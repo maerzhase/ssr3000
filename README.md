@@ -22,18 +22,6 @@ hydrate(
   </AppContainer>,
   document.getElementById('root'),
 );
-
-if (module.hot) {
-  module.hot.accept('./components/App.js', () => {
-    const NextApp = require('./components/App.js').default;
-    hydrate(
-      <AppContainer>
-          <NextApp />
-      </AppContainer>,
-      document.getElementById('root'),
-    );
-  });
-}
 ```
 
 ### server entry file
