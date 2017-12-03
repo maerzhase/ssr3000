@@ -1,5 +1,3 @@
-import fs from 'fs';
-import path from 'path';
 import webpack from 'webpack';
 import ManifestPlugin from 'webpack-manifest-plugin';
 import webpackClientConfig from './webpack.client.config';

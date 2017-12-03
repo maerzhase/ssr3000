@@ -35,6 +35,7 @@
     "react-hot-loader": "^3.1.3",
     "ssr3000": "file:../../",
     "webpack": "^3.8.1",
+    "webpack-manifest-plugin": "^1.3.2",
     "webpack-node-externals": "^1.6.0"
   },
   "postcss": {
