@@ -24,10 +24,6 @@ export default function clientCompiler(webpackConfig) {
       publicPath: clientConfig.output.publicPath,
       quiet: true,
       serverSideRender: true,
-      reporter: (webpackStats) => {
-        const stats = webpackStats.stats;
-        webpackReporter(stats, 'client');
-      },
     },
   );
   const hotMiddleware = webpackHotMiddleware(
@@ -42,5 +38,12 @@ export default function clientCompiler(webpackConfig) {
   return {
     devMiddleware,
     hotMiddleware,
+    isValid: (cb) => {
+      compiler.plugin('done', (stats) => {
+        const hasErrors = webpackReporter(stats, 'client');
+        if (hasErrors) return;
+        cb(stats);
+      });
+    },
   };
 }
