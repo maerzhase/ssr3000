@@ -1,7 +1,7 @@
 import chalk from 'chalk';
 import formatWebpackMessages from 'react-dev-utils/formatWebpackMessages';
 
-const log = (...str) => {
+export const log = (...str) => {
   console.log('[SSR]', ...str);
 };
 
@@ -37,11 +37,11 @@ export const buildTime = (stats) => {
   return `${Number(endTime) - Number(startTime)}`;
 };
 
-export const webpackReporter = (stats, env) => {
+export const webpackReporter = (stats, target) => {
   const messages = formatWebpackMessages(stats.toJson({}, true));
 
   if (messages.errors.length > 0) {
-    errorBanner(`${env && chalk.bgWhite.black(env)} failed to compile`);
+    errorBanner(`failed to compile ${target && chalk.bgWhite.black(target)}`);
     console.log();
     messages.errors.forEach((message) => {
       console.log(message);
@@ -50,17 +50,17 @@ export const webpackReporter = (stats, env) => {
     return true;
   }
   if (messages.warnings.length > 0) {
-    warningBanner(`${env && chalk.bgWhite.black(env)} compiled with warnings`);
+    warningBanner(`compiled with warnings ${target && chalk.bgWhite.black(target)}`);
     console.log();
-    messages.errors.forEach((message) => {
+    messages.warnings.forEach((message) => {
       log(message);
       console.log();
     });
-    return true;
+    return false;
   }
 
-  success(`webpack build in ${buildTime(stats)}ms`);
-  return true;
+  success(`${chalk.gray(target)} webpack build in ${buildTime(stats)}ms`);
+  return false;
 };
 
 export default log;
