@@ -1,4 +1,4 @@
-import ssr3000 from 'ssr3000';
+import ssr3000 from '../../src/index';
 import clientConfig from './webpack.client.config';
 import serverConfig from './webpack.server.config';
 

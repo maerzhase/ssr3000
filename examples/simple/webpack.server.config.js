@@ -39,6 +39,13 @@ export default {
         loader: 'raw-loader',
       },
       {
+        enforce: 'pre',
+        test: /\.js$/,
+        include: JS_INCLUDES,
+        exclude: /node_modules/,
+        loader: 'eslint-loader',
+      },
+      {
         test: /\.js$/,
         include: JS_INCLUDES,
         exclude: /node_modules/,

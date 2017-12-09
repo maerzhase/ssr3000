@@ -26,6 +26,15 @@ export default {
   module: {
     rules: [
       {
+        enforce: 'pre',
+        test: /\.js$/,
+        include: JS_INCLUDES,
+        loader: 'eslint-loader',
+        options: {
+          cacheDirectory: true,
+        },
+      },
+      {
         test: /\.js$/,
         include: JS_INCLUDES,
         loader: 'babel-loader',

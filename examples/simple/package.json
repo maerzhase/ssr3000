@@ -5,7 +5,9 @@
   "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "watch": "babel-node ./watch.js"
+    "watch": "babel-node ./watch.js",
+    "build": "babel-node ./build.js",
+    "serve": "babel-node ./serve.js"
   },
   "author": "maerzhase",
   "license": "MIT",
@@ -24,6 +26,7 @@
     "clean-webpack-plugin": "^0.1.17",
     "eslint": "^3.19.0",
     "eslint-config-airbnb": "^14.1.0",
+    "eslint-loader": "^1.9.0",
     "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-jsx-a11y": "^4.0.0",
     "eslint-plugin-react": "^6.10.3",
