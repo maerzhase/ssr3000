@@ -19,7 +19,7 @@ function compile(config) {
 const build = (cConfig, sConfig) => {
   const clientConfig = resolveConfig(cConfig, clientProdConfigPath);
   const serverConfig = resolveConfig(sConfig, serverProdConfigPath);
-  if (!clientConfig && !serverConfig) {
+  if (!clientConfig || !serverConfig) {
     console.error('error loading config files');
     process.exit(1);
   }
