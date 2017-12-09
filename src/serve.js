@@ -1,7 +1,8 @@
 import path from 'path';
 import express from 'express';
+import chalk from 'chalk';
 import compressionMiddleware from 'compression';
-import { info } from './utils/logging';
+import { log } from './utils/logging';
 import {
   clientProdConfigPath,
   serverProdConfigPath,
@@ -13,7 +14,7 @@ import { getChunksFromManifest, resolveConfig } from './utils/webpack';
 const serve = (host, port, cConfig, sConfig) => {
   const clientConfig = resolveConfig(cConfig, clientProdConfigPath);
   const serverConfig = resolveConfig(sConfig, serverProdConfigPath);
-  if (!clientConfig && !serverConfig) {
+  if (!clientConfig || !serverConfig) {
     console.error('error loading config files');
     process.exit(1);
   }
@@ -54,7 +55,7 @@ const serve = (host, port, cConfig, sConfig) => {
   app.use(SSRMiddleware(chunks));
   app.listen(PORT, HOST, (err) => {
     if (err) console.error(err);
-    info(`serving production build on ${HOST}:${PORT}`);
+    log(chalk.yellow('serving production build'), chalk.bgYellow.black(`${HOST}:${PORT}`));
   });
 };
 
