@@ -67,7 +67,7 @@ It's important to realize that you are responsible for what get's rendered to yo
 
 ## Node.js API
 
-### ssr3000()
+### ssr3000
 
 `ssr3000()`
 
