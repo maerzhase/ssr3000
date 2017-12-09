@@ -25,7 +25,7 @@ hydrate(
 
 ### server entry file
 
-The __server entry__  actually is an express middleware that is used by the `SSR3000` server directly. At the back of the stage `SSR3000` takes care of the webpack bundling and then serves the chunk files to your middleware. 
+The __server entry__  is an middleware that will be added to the `express` server. `SSR3000` takes care of the webpack bundling in the background and serves the chunk files to your middleware. 
 
 ```
 import React from 'react';
@@ -55,34 +55,82 @@ export default (chunks) => {
 }
 ```
 
-It's important to realize that you are responsible for what get's rendered to your client. Without your middleware the server is running but there is no default way of handling responses — therefore without your middleware you will see no output in the browser. But it also gives you the greatest flexibilty, because you can provide additional logic to handle routing or serialize inital stores to your client.
+It's important to realize that you are responsible for what get's rendered to your client. Without your middleware the server is running but there is no default way of handling responses — therefore without your middleware you will see no output in the browser. It also gives you the greatest flexibilty, because you can provide additional logic e.g. handle routing, serialize inital data to the browser, etc.
 
 
 ## Getting started
 
   1. `npm install --save ssr3000`
   
-  2. Provide the webpack configuration. There are 3 main parts that are mandatory; the rest is taken care of. Since we are running a serverside application we need a config for the __client__ and for the __server__. [(see configuration section)](#configuration)
+  2. Create the webpack configuration. There are 3 main parts that are mandatory; the rest is taken care of. Since we are running a serverside application we need a config for the __client__ and for the __server__. [(see configuration section)](#configuration)
 
 
-## Use nodejs API
-So you have installed `ssr3000` and setup the webpack configuration? 
-For setting up a dev-server with hot-reloading you just need a script to watch your application:
+## Node.js API
+
+### ssr3000()
+
+`ssr3000()`
+
+the default export of the SSR3000 module is an ssr3000 instance read to be initialized. 
+
 ```
 import ssr3000 from 'ssr3000';
-import clientConfig from './webpack.client.config';
-import serverConfig from './webpack.server.config';
+
+const SSR3000 = ssr3000();
+```
+
+### watch
+
+`ssr3000.watch(hostname, port, clientConfig, serverConfig)`
+
+The watch function starts the SSR3000 server for development. You can provide When the first bundle is ready it will notify that a server has been started. If no `clientCOnfig` and/or `serverConfig` parameters are provided the renderer will look for a `webpack.client.config.js` and `webpack.server.config.js` in the folder from where the application is running.
+
+```
+import ssr3000 from 'ssr3000';
+import clientConfig from './webpack.client.config'; // this is also the default fallback path
+import serverConfig from './webpack.server.config'; // this is also the default fallback path
 
 const SSR3000 = ssr3000();
 
 SSR3000.watch('0.0.0.0', 9999, clientConfig, serverConfig); 
 ```
 
-For more information see `examples/simple` for a basic react application setup with `SSR3000`
+### build
 
-## Use CLI
-example comming soon
+`ssr3000.build(clientProductionConfig, serverProductionConfig)`
 
+The build function will build your application for production. If no `clientProductionConfig` and/or `serverProductionConfig` parameters are provided the renderer will look for a `webpack.client.prod.config.js` and `webpack.server.prod.config.js` in the folder from where the application is running. The process will terminate after the build was successfull. 
+
+```
+import ssr3000 from '../../src/index';
+import clientProductionConfig from './webpack.client.prod.config';
+import serverProductionConfig from './webpack.server.prod.config';
+
+const SSR3000 = ssr3000();
+
+SSR3000.build(clientProductionConfig, serverProductionConfig);
+```
+
+### serve
+
+`ssr3000.serve(clientProductionConfig, serverProductionConfig)`
+
+The serve function will serve the production build of your application – make sure u have used [ssr3000.build()](#build) before. If no `clientProductionConfig` and/or `serverProductionConfig` parameters are provided the server will look for a `webpack.client.prod.config.js` and `webpack.server.prod.config.js` in the folder from where the application is running.
+
+```
+import ssr3000 from '../../src/index';
+import clientProductionConfig from './webpack.client.prod.config';
+import serverProductionConfig from './webpack.server.prod.config';
+
+const SSR3000 = ssr3000();
+
+SSR3000.serve('0.0.0.0', 9999, clientProductionConfig, serverProductionConfig);
+
+```
+
+## Examples
+
+see `examples/simple/` for a simple react application setup.
 
 ## Configuration
 Based on the SSR3000 principle let's take a look at the mandatory webpack configuration to run your project. 
