@@ -81,7 +81,7 @@ const SSR3000 = ssr3000();
 
 ### watch
 
-`ssr3000.watch(hostname, port, clientConfig, serverConfig)`
+`ssr3000.watch(host, port, clientConfig, serverConfig)`
 
 The watch function starts the SSR3000 server for development. You can provide When the first bundle is ready it will notify that a server has been started. If no `clientCOnfig` and/or `serverConfig` parameters are provided the renderer will look for a `webpack.client.config.js` and `webpack.server.config.js` in the folder from where the application is running.
 
@@ -113,7 +113,7 @@ SSR3000.build(clientProductionConfig, serverProductionConfig);
 
 ### serve
 
-`ssr3000.serve(clientProductionConfig, serverProductionConfig)`
+`ssr3000.serve(host, port, clientProductionConfig, serverProductionConfig)`
 
 The serve function will serve the production build of your application – make sure u have used [ssr3000.build()](#build) before. If no `clientProductionConfig` and/or `serverProductionConfig` parameters are provided the server will look for a `webpack.client.prod.config.js` and `webpack.server.prod.config.js` in the folder from where the application is running.
 
