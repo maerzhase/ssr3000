@@ -55,7 +55,7 @@ export default (chunks) => {
 }
 ```
 
-It's important to realize that you are responsible for what get's rendered to your client. Without your middleware the server is running but there is no default way of handling responses — therefore without your middleware you will see not output in the browser. But it also gives you the greatest flexibilty, because you can provide additional logic to handle routing or serialize inital stores to your client.
+It's important to realize that you are responsible for what get's rendered to your client. Without your middleware the server is running but there is no default way of handling responses — therefore without your middleware you will see no output in the browser. But it also gives you the greatest flexibilty, because you can provide additional logic to handle routing or serialize inital stores to your client.
 
 
 ## Getting started
