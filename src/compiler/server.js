@@ -21,20 +21,21 @@ export default function serverCompiler(webpackConfig) {
     delete require.cache[BUILD_FILE_PATH];
   };
 
-  const watch = (callback) => {
-    log('start watching server');
-    compiler.watch({}, (error, stats) => {
-      if (error) {
-        console.error(error);
-      }
-      webpackReporter(stats, 'server');
-      invalidate();
-      callback(stats);
-    });
-  };
+  compiler.watch({}, (error) => {
+    if (error) {
+      console.error(error);
+    }
+    invalidate();
+  });
 
   return {
-    watch,
+    isValid: (cb) => {
+      compiler.plugin('done', (stats) => {
+        const hasErrors = webpackReporter(stats, 'server');
+        if (hasErrors) return;
+        cb(stats);
+      });
+    },
     middleware: (req, res, next) => {
       const { default: SSRMiddleware } = require(BUILD_FILE_PATH); // eslint-disable-line
       const { webpackStats: stats } = res.locals;
