@@ -80,7 +80,7 @@ It's important to realize that you are responsible for what get's rendered to yo
 
   2. Create a [`.ssr3000rc`](#.ssr3000rc) file
   
-  3. Create the [webpack configuration](#A brief digression into webpack).
+  3. Create the [webpack configuration](#a-brief-digression-into-webpack).
 
 
 ## Node.js API
