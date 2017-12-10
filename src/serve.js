@@ -3,17 +3,12 @@ import express from 'express';
 import chalk from 'chalk';
 import compressionMiddleware from 'compression';
 import { log } from './utils/logging';
-import {
-  clientProdConfigPath,
-  serverProdConfigPath,
-  HOST as DEFAULT_HOST,
-  PORT as DEFAULT_PORT,
-} from './constants';
+import constants from './constants';
 import { getChunksFromManifest, resolveConfig } from './utils/webpack';
 
 const serve = (host, port, cConfig, sConfig) => {
-  const clientConfig = resolveConfig(cConfig, clientProdConfigPath);
-  const serverConfig = resolveConfig(sConfig, serverProdConfigPath);
+  const clientConfig = resolveConfig(cConfig, constants.clientProdConfigPath);
+  const serverConfig = resolveConfig(sConfig, constants.serverProdConfigPath);
   if (!clientConfig || !serverConfig) {
     console.error('error loading config files');
     process.exit(1);
@@ -37,8 +32,8 @@ const serve = (host, port, cConfig, sConfig) => {
 
   const CLIENT_MANIFEST_PATH = path.join(CLIENT_BUILD_PATH, 'manifest.json');
 
-  const HOST = host || DEFAULT_HOST;
-  const PORT = port || DEFAULT_PORT;
+  const HOST = host || constants.host;
+  const PORT = port || constants.port;
   const manifest = require(CLIENT_MANIFEST_PATH); // eslint-disable-line 
   const { default: SSRMiddleware } = require(SERVER_BUILD_FILE_PATH); // eslint-disable-line 
   /*

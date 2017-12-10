@@ -1,6 +1,6 @@
 import webpack from 'webpack';
 import { buildTime, info, success } from './utils/logging';
-import { clientProdConfigPath, serverProdConfigPath } from './constants';
+import constants from './constants';
 import { resolveConfig } from './utils/webpack';
 
 
@@ -17,8 +17,8 @@ function compile(config) {
 }
 
 const build = (cConfig, sConfig) => {
-  const clientConfig = resolveConfig(cConfig, clientProdConfigPath);
-  const serverConfig = resolveConfig(sConfig, serverProdConfigPath);
+  const clientConfig = resolveConfig(cConfig, constants.clientProdConfigPath);
+  const serverConfig = resolveConfig(sConfig, constants.serverProdConfigPath);
   if (!clientConfig || !serverConfig) {
     console.error('error loading config files');
     process.exit(1);
