@@ -7,7 +7,10 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "babel-node ./watch.js",
     "build": "babel-node ./build.js",
-    "serve": "babel-node ./serve.js"
+    "serve": "babel-node ./serve.js",
+    "cli:watch": "./node_modules/.bin/ssr3000-watch",
+    "cli:build": "./node_modules/.bin/ssr3000-build",
+    "cli:serve": "./node_modules/.bin/ssr3000-serve"
   },
   "author": "maerzhase",
   "license": "MIT",
