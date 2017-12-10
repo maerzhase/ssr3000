@@ -3,24 +3,19 @@ import moment from 'moment';
 import chalk from 'chalk';
 import clientCompiler from './compiler/client';
 import serverCompiler from './compiler/server';
-import { info, errorBanner, log } from './utils/logging';
-import {
-  clientConfigPath,
-  serverConfigPath,
-  HOST as DEFAULT_HOST,
-  PORT as DEFAULT_PORT,
-} from './constants';
+import { errorBanner, log } from './utils/logging';
+import constants from './constants';
 import { resolveConfig } from './utils/webpack';
 
 const watch = (host, port, cConfig, sConfig) => {
-  const clientConfig = resolveConfig(cConfig, clientConfigPath);
-  const serverConfig = resolveConfig(sConfig, serverConfigPath);
+  const clientConfig = resolveConfig(cConfig, constants.clientConfigPath);
+  const serverConfig = resolveConfig(sConfig, constants.serverConfigPath);
   if (!clientConfig || !serverConfig) {
     errorBanner('error loading config files');
     process.exit(1);
   }
-  const HOST = host || DEFAULT_HOST;
-  const PORT = port || DEFAULT_PORT;
+  const HOST = host || constants.host;
+  const PORT = port || constants.port;
   const ClientCompiler = clientCompiler(clientConfig);
   const ServerCompiler = serverCompiler(serverConfig);
   const app = express();
@@ -30,7 +25,7 @@ const watch = (host, port, cConfig, sConfig) => {
   let serverReady = false;
 
   app.use(ClientCompiler.devMiddleware);
-  app.use(ClientCompiler.hotMiddleware);
+  if (constants.config.hot) app.use(ClientCompiler.hotMiddleware);
   app.use(ServerCompiler.middleware);
 
   const reportValidity = () => {

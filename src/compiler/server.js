@@ -1,6 +1,6 @@
 import webpack from 'webpack';
 import path from 'path';
-import log, { webpackReporter } from '../utils/logging';
+import { webpackReporter } from '../utils/logging';
 import { getChunkFiles } from '../utils/webpack';
 
 export default function serverCompiler(webpackConfig) {
