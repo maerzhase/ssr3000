@@ -140,7 +140,7 @@ SSR3000.build(clientProductionConfig, serverProductionConfig);
 
 ```JavaScript
 ssr3000.serve(host, port, clientProductionConfig, serverProductionConfig)
-``
+```
 
 The serve function will serve the production build of your application – make sure u have used [ssr3000.build()](#build) before. If no `clientProductionConfig` and/or `serverProductionConfig` parameters are provided the server will look for a `webpack.client.prod.config.js` and `webpack.server.prod.config.js` in the folder from where the application is running. You can configure default lookup paths within your [`.ssr3000rc`](#ssr3000rc).
 
