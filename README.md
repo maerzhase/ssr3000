@@ -106,8 +106,8 @@ The watch function starts the SSR3000 server for development. When the first bun
 
 ```
 import ssr3000 from 'ssr3000';
-import clientConfig from './webpack.client.config'; // this is also the default fallback path
-import serverConfig from './webpack.server.config'; // this is also the default fallback path
+import clientConfig from './webpack.client.config';
+import serverConfig from './webpack.server.config';
 
 const SSR3000 = ssr3000();
 
@@ -121,7 +121,7 @@ SSR3000.watch('0.0.0.0', 9999, clientConfig, serverConfig);
 The build function will build your application for production. If no `clientProductionConfig` and/or `serverProductionConfig` parameters are provided the renderer will look for a `webpack.client.prod.config.js` and `webpack.server.prod.config.js` in the folder from where the application is running. The process will terminate after the build was successfull. You can configure default lookup paths within your [`.ssr3000rc`](#ssr3000rc).
 
 ```
-import ssr3000 from '../../src/index';
+import ssr3000 from 'ssr3000';
 import clientProductionConfig from './webpack.client.prod.config';
 import serverProductionConfig from './webpack.server.prod.config';
 
@@ -137,7 +137,7 @@ SSR3000.build(clientProductionConfig, serverProductionConfig);
 The serve function will serve the production build of your application – make sure u have used [ssr3000.build()](#build) before. If no `clientProductionConfig` and/or `serverProductionConfig` parameters are provided the server will look for a `webpack.client.prod.config.js` and `webpack.server.prod.config.js` in the folder from where the application is running. You can configure default lookup paths within your [`.ssr3000rc`](#ssr3000rc).
 
 ```
-import ssr3000 from '../../src/index';
+import ssr3000 from 'ssr3000';
 import clientProductionConfig from './webpack.client.prod.config';
 import serverProductionConfig from './webpack.server.prod.config';
 
