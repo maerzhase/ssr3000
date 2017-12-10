@@ -5,7 +5,7 @@ A simple serverside rendering framework for react applications. build with [expr
 
 ## The idea
 
-SSR3000 i build around the principle of having two different entry files for your application:
+SSR3000 is build around the principle of having two different entry files for your application:
 - The __client entry__, which usually calls `React.render` or `React.hydrate`
 - The __server entry__, that handles requests and decides how content get's rendered to the client
 
