@@ -37,7 +37,7 @@ if (module.hot) {
 
 ```
 
-SSR3000 uses hot realoading by default. In order to make the hot reloading work we need the snippet with the if-clause. [see react-hot-loader](https://github.com/gaearon/react-hot-loader). You can switch off hot loading in the [`.ssr3000rc`](#.ssr3000rc)
+SSR3000 uses hot realoading by default. In order to make the hot reloading work we need the snippet with the if-clause. [see react-hot-loader](https://github.com/gaearon/react-hot-loader). You can switch off hot loading in the [`.ssr3000rc`](#ssr3000rc)
 
 ### server entry file
 
@@ -78,7 +78,7 @@ It's important to realize that you are responsible for what get's rendered to yo
 
   1. `npm install --save ssr3000`
 
-  2. Create a [`.ssr3000rc`](#.ssr3000rc) file
+  2. Create a [`.ssr3000rc`](#ssr3000rc) file
   
   3. Create the [webpack configuration](#a-brief-digression-into-webpack).
 
