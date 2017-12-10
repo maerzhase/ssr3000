@@ -1,4 +1,4 @@
-# SRR3000
+# SSR3000
 
 A simple serverside rendering framework for react applications. build with [express](https://github.com/expressjs/express) and [webpack](https://github.com/webpack/webpack).
 
