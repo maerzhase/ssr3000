@@ -83,7 +83,7 @@ It's important to realize that you are responsible for what get's rendered to yo
   
   3. Create the [webpack configuration](#a-brief-digression-into-webpack).
 
-Now you are ready to setup your application with the [Node.js API](#node-js-api) or [Command Line Interface (CLI)](#CLI)
+Now you are ready to setup your application with the [Node.js API](#nodejs-api) or [Command Line Interface (CLI)](#cli)
 
 ## Node.js API
 
@@ -216,7 +216,7 @@ see `examples/simple/` for a simple react application setup.
 
 run `npm install` from within the _examples/simple_ folder
 
-Please note that there are two webpack-configurations (one in the root folder and one in the webpack folder). This is to demonstrate the usage of `ssr3000rc`. The server will also start on a different port and hostname when you use the Node.js API or the CLI (npm commands have cli: prefix).
+Please note that there are two webpack-configurations (one in the root folder and one in the webpack folder). This is to demonstrate the usage of the [`.ssr3000rc`](#ssr3000rc). The server will also start on a different port and hostname when you use the Node.js API or the CLI (npm commands have `cli:` prefix).
 
 
 #### Start development server
