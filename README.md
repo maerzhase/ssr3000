@@ -11,7 +11,7 @@ SSR3000 i build around the principle of having two different entry files for you
 
 ### client entry file
 A typical __client entry__ file will look similar to this:
-```
+```JavaScript
 import React from 'react';
 import { AppContainer } from 'react-hot-loader';
 import { hydrate } from 'react-dom';
@@ -44,7 +44,7 @@ SSR3000 uses hot realoading by default. In order to make the hot reloading work 
 
 The __server entry__  is an middleware that will be added to the express server. SSR3000 takes care of the webpack bundling in the background and serves the chunk files to your middleware. 
 
-```
+```JavaScript
 import React from 'react';
 import { renderToString } from 'react-dom/server';
 import { Router } from 'express';
@@ -92,7 +92,7 @@ It's important to realize that you are responsible for what get's rendered to yo
 
 the default export of the SSR3000 module is an ssr3000 instance ready to be initialized. 
 
-```
+```JavaScript
 import ssr3000 from 'ssr3000';
 
 const SSR3000 = ssr3000();
@@ -100,11 +100,13 @@ const SSR3000 = ssr3000();
 
 ### watch
 
-`ssr3000.watch(host, port, clientConfig, serverConfig)`
+```JavaScript
+ssr3000.watch(host, port, clientConfig, serverConfig)
+```
 
 The watch function starts the SSR3000 server for development. When the first bundle is ready it will notify that a server has been started. If no `host` and/or `port` parameters are provided it will use the defaults from the [`.ssr3000rc`](#ssr3000rc). If no `clientConfig` and/or `serverConfig` parameters are provided the renderer will look for a `webpack.client.config.js` and `webpack.server.config.js` in the folder from where the application is running. You can configure default lookup paths within your [`.ssr3000rc`](#ssr3000rc).
 
-```
+```JavaScript
 import ssr3000 from 'ssr3000';
 import clientConfig from './webpack.client.config';
 import serverConfig from './webpack.server.config';
@@ -116,11 +118,13 @@ SSR3000.watch('0.0.0.0', 9999, clientConfig, serverConfig);
 
 ### build
 
-`ssr3000.build(clientProductionConfig, serverProductionConfig)`
+```JavaScript
+ssr3000.build(clientProductionConfig, serverProductionConfig)
+```
 
 The build function will build your application for production. If no `clientProductionConfig` and/or `serverProductionConfig` parameters are provided the renderer will look for a `webpack.client.prod.config.js` and `webpack.server.prod.config.js` in the folder from where the application is running. The process will terminate after the build was successfull. You can configure default lookup paths within your [`.ssr3000rc`](#ssr3000rc).
 
-```
+```JavaScript
 import ssr3000 from 'ssr3000';
 import clientProductionConfig from './webpack.client.prod.config';
 import serverProductionConfig from './webpack.server.prod.config';
@@ -132,11 +136,13 @@ SSR3000.build(clientProductionConfig, serverProductionConfig);
 
 ### serve
 
-`ssr3000.serve(host, port, clientProductionConfig, serverProductionConfig)`
+```JavaScript
+ssr3000.serve(host, port, clientProductionConfig, serverProductionConfig)
+```
 
 The serve function will serve the production build of your application – make sure u have used [ssr3000.build()](#build) before. If no `clientProductionConfig` and/or `serverProductionConfig` parameters are provided the server will look for a `webpack.client.prod.config.js` and `webpack.server.prod.config.js` in the folder from where the application is running. You can configure default lookup paths within your [`.ssr3000rc`](#ssr3000rc).
 
-```
+```JavaScript
 import ssr3000 from 'ssr3000';
 import clientProductionConfig from './webpack.client.prod.config';
 import serverProductionConfig from './webpack.server.prod.config';
