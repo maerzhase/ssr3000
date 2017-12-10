@@ -163,7 +163,7 @@ Use the `.ssr3000rc` to configure SSR3000 for your project. The `.ssr3000rc` fil
 ```
 {
   "host": "localhost",
-  "port": 8000,
+  "port": 8000
 }
 ```
 
