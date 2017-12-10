@@ -24,8 +24,8 @@ const constants = () => {
     config.serverProductionConfig,
   );
 
-  const HOST = config.host || '0.0.0.0';
-  const PORT = config.port || 8000;
+  const host = config.host || '0.0.0.0';
+  const port = config.port || 8000;
 
   return {
     config,
@@ -33,8 +33,8 @@ const constants = () => {
     clientProdConfigPath,
     serverConfigPath,
     serverProdConfigPath,
-    HOST,
-    PORT,
+    host,
+    port,
   };
 };
 
