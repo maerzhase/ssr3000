@@ -1,24 +1,41 @@
 import path from 'path';
+import { loadConfig } from './utils/configuration';
 
-export const clientConfigPath = path.join(
-  process.cwd(),
-  'webpack.client.config.js',
-);
+const constants = () => {
+  const config = loadConfig();
 
-export const clientProdConfigPath = path.join(
-  process.cwd(),
-  'webpack.client.prod.config.js',
-);
+  const clientConfigPath = path.join(
+    config.configPath,
+    config.clientConfig,
+  );
 
-export const serverConfigPath = path.join(
-  process.cwd(),
-  'webpack.server.config.js',
-);
+  const clientProdConfigPath = path.join(
+    config.configPath,
+    config.clientProductionConfig,
+  );
 
-export const serverProdConfigPath = path.join(
-  process.cwd(),
-  'webpack.server.prod.config.js',
-);
+  const serverConfigPath = path.join(
+    config.configPath,
+    config.serverConfig,
+  );
 
-export const HOST = process.env.HOST || '0.0.0.0';
-export const PORT = process.env.PORT || 8000;
+  const serverProdConfigPath = path.join(
+    config.configPath,
+    config.serverProductionConfig,
+  );
+
+  const HOST = config.host || '0.0.0.0';
+  const PORT = config.port || 8000;
+
+  return {
+    config,
+    clientConfigPath,
+    clientProdConfigPath,
+    serverConfigPath,
+    serverProdConfigPath,
+    HOST,
+    PORT,
+  };
+};
+
+export default constants();
