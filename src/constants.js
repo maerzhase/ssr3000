@@ -5,22 +5,22 @@ const constants = () => {
   const config = loadConfig();
 
   const clientConfigPath = path.join(
-    config.configPath,
+    process.cwd(),
     config.clientConfig,
   );
 
   const clientProdConfigPath = path.join(
-    config.configPath,
+    process.cwd(),
     config.clientProductionConfig,
   );
 
   const serverConfigPath = path.join(
-    config.configPath,
+    process.cwd(),
     config.serverConfig,
   );
 
   const serverProdConfigPath = path.join(
-    config.configPath,
+    process.cwd(),
     config.serverProductionConfig,
   );
 
