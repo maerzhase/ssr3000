@@ -30,7 +30,7 @@ export default function serverCompiler(webpackConfig) {
 
   return {
     isValid: (cb) => {
-      compiler.plugin('done', (stats) => {
+      compiler.hooks.done.tap('ssr3000-server-done', (stats) => {
         const hasErrors = webpackReporter(stats, 'server');
         if (hasErrors) return;
         cb(stats);

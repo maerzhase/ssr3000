@@ -12,7 +12,6 @@ export default function clientCompiler(webpackConfig) {
 
   if (addHotFeatures) {
     hotEntry = [
-      'react-hot-loader/patch',
       'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000',
     ];
     hotPlugins = [
@@ -39,6 +38,8 @@ export default function clientCompiler(webpackConfig) {
     {
       publicPath: clientConfig.output.publicPath,
       quiet: true,
+      noInfo: true,
+      logLevel: 'silent',
       serverSideRender: true,
     },
   );
@@ -47,7 +48,7 @@ export default function clientCompiler(webpackConfig) {
     {
       log: false,
       path: '/__webpack_hmr',
-      heartbeat: 10 * 1000,
+      heartbeat: 2500,
     },
   );
 
@@ -55,7 +56,7 @@ export default function clientCompiler(webpackConfig) {
     devMiddleware,
     hotMiddleware,
     isValid: (cb) => {
-      compiler.plugin('done', (stats) => {
+      compiler.hooks.done.tap('ssr3000-client-done', (stats) => {
         const hasErrors = webpackReporter(stats, 'client');
         if (hasErrors) return;
         cb(stats);
