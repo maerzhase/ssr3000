@@ -45,9 +45,9 @@ hydrate(
 );
 ```
 
-  5. create `serverMiddleware` folder
+  5. create `src/serverMiddleware` folder
 
-  6. create html template to serve: `serverMiddleware/index.ejs`
+  6. create html template to serve: `src/serverMiddleware/index.ejs`
 
 ```
 <html>
@@ -61,7 +61,7 @@ hydrate(
 </html>
 ```
 
-  7. create server entry: `serverMiddleware/index.js`
+  7. create server entry: `src/serverMiddleware/index.js`
 
 ```JavaScript
 import React from 'react';
@@ -100,7 +100,7 @@ const App = () => (
 
 export default hot(module)(App);
 ```
-###### SSR3000 uses hot realoading by default when watching your application. See [react-hot-loader](https://github.com/gaearon/react-hot-loader) for more informations.
+###### SSR3000 uses hot reloading by default when watching your application. See [react-hot-loader](https://github.com/gaearon/react-hot-loader) for more informations.
 
  9. `npm run watch`
 
