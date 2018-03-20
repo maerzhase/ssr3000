@@ -15,38 +15,11 @@
   "author": "maerzhase",
   "license": "MIT",
   "dependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-eslint": "^7.2.1",
-    "babel-loader": "^7.1.2",
-    "babel-plugin-transform-class-properties": "^6.24.1",
-    "babel-plugin-transform-decorators-legacy": "^1.3.4",
-    "babel-plugin-transform-runtime": "^6.23.0",
-    "babel-preset-env": "^1.6.1",
-    "babel-preset-es2015": "^6.24.1",
-    "babel-preset-react": "^6.24.1",
-    "babel-preset-stage-3": "^6.24.1",
-    "babel-runtime": "^6.26.0",
-    "clean-webpack-plugin": "^0.1.17",
-    "eslint": "^3.19.0",
-    "eslint-config-airbnb": "^14.1.0",
-    "eslint-loader": "^1.9.0",
-    "eslint-plugin-import": "^2.2.0",
-    "eslint-plugin-jsx-a11y": "^4.0.0",
-    "eslint-plugin-react": "^6.10.3",
-    "express": "^4.16.2",
+    "express": "^4.16.3",
     "lodash.template": "^4.4.0",
-    "raw-loader": "^0.5.1",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
-    "react-hot-loader": "^3.1.3",
-    "ssr3000": "file:../../",
-    "webpack": "^3.8.1",
-    "webpack-manifest-plugin": "^1.3.2",
-    "webpack-node-externals": "^1.6.0"
-  },
-  "postcss": {
-    "plugins": {
-      "autoprefixer": {}
-    }
+    "react-hot-loader": "^4.0.0",
+    "ssr3000": "file:../../"
   }
 }

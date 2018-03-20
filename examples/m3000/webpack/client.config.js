@@ -1,10 +1,6 @@
 var fs = require('fs');
 var path = require('path');
 var CleanWebpackPlugin = require('clean-webpack-plugin');
-var webpack = require('webpack');
-var ManifestPlugin = require('webpack-manifest-plugin');
-
-var CLIENT_MANIFEST_FILE_NAME = 'manifest.json';
 
 var APP_PATH = fs.realpathSync(process.cwd());
 var SRC_PATH = path.join(APP_PATH, 'src');
@@ -18,6 +14,7 @@ var JS_INCLUDES = [
 ];
 
 module.exports = {
+  mode: 'development',
   entry: [
     APP_ENTRY,
   ],
@@ -56,28 +53,6 @@ module.exports = {
   },
   plugins: [
     new CleanWebpackPlugin(['build/client']),
-    new webpack.LoaderOptionsPlugin({
-      minimize: true,
-      debug: false,
-    }),
-    new webpack.optimize.UglifyJsPlugin({
-      compress: {
-        screw_ie8: true, // React doesn't support IE8
-        warnings: false,
-        comparisons: false,  // don't optimize comparisons
-      },
-      mangle: {
-        screw_ie8: true,
-      },
-      output: {
-        comments: false,
-        screw_ie8: true,
-      },
-      sourceMap: true,
-    }),
-    new ManifestPlugin({
-      fileName: CLIENT_MANIFEST_FILE_NAME,
-    }),
   ],
-  devtool: 'source-map',
+  devtool: 'cheap-module-eval-source-map',
 };

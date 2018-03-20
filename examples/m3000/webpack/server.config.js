@@ -1,26 +1,27 @@
-import fs from 'fs';
-import path from 'path';
-import CleanWebpackPlugin from 'clean-webpack-plugin';
-import nodeExternals from 'webpack-node-externals';
+var fs = require('fs');
+var path = require('path');
+var CleanWebpackPlugin = require('clean-webpack-plugin');
+var nodeExternals = require('webpack-node-externals');
 
-export const APP_PATH = fs.realpathSync(process.cwd());
-export const SRC_PATH = path.join(APP_PATH, 'src');
-export const APP_ENTRY = path.join(SRC_PATH, 'serverMiddleware', 'index.js');
-export const NODE_MODULES_PATH = path.join(APP_PATH, 'node_modules');
-export const BUILD_PATH = path.join(APP_PATH, 'build', 'server');
-export const BUILD_FILE_NAME = 'bundle.js';
-export const PUBLIC_PATH = '/assets/';
+var APP_PATH = fs.realpathSync(process.cwd());
+var SRC_PATH = path.join(APP_PATH, 'src');
+var APP_ENTRY = path.join(SRC_PATH, 'serverMiddleware', 'index.js');
+var NODE_MODULES_PATH = path.join(APP_PATH, 'node_modules');
+var BUILD_PATH = path.join(APP_PATH, 'build', 'server');
+var BUILD_FILE_NAME = 'bundle.js';
+var PUBLIC_PATH = '/assets/';
 
-export const BUILD_FILE = path.join(
+var BUILD_FILE = path.join(
   BUILD_PATH,
   BUILD_FILE_NAME,
 );
 
-export const JS_INCLUDES = [
+var JS_INCLUDES = [
   SRC_PATH,
 ];
 
-export default {
+module.exports = {
+  mode: 'development',
   entry: [
     APP_ENTRY,
   ],

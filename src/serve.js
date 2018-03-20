@@ -4,11 +4,30 @@ import chalk from 'chalk';
 import compressionMiddleware from 'compression';
 import { log } from './utils/logging';
 import constants from './constants';
-import { getChunksFromManifest, resolveConfig } from './utils/webpack';
+import { getChunksFromManifest, loadCustomizations } from './utils/webpack';
+import defaultClientConfig from './webpack/client.prod.config';
+import defaultServerConfig from './webpack/server.prod.config';
 
-const serve = (host, port, cConfig, sConfig) => {
-  const clientConfig = resolveConfig(cConfig, constants.clientProdConfigPath);
-  const serverConfig = resolveConfig(sConfig, constants.serverProdConfigPath);
+const serve = (host, port) => {
+  const customConfig = loadCustomizations(constants.configPath);
+
+  const customClientConfig = customConfig && customConfig(
+    defaultClientConfig,
+    {
+      isServer: false,
+    },
+  );
+
+  const customServerConfig = customConfig && customConfig(
+    defaultServerConfig,
+    {
+      isServer: true,
+    },
+  );
+
+  const clientConfig = customClientConfig || defaultClientConfig;
+  const serverConfig = customServerConfig || defaultServerConfig;
+
   if (!clientConfig || !serverConfig) {
     console.error('error loading config files');
     process.exit(1);

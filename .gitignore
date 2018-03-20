@@ -1,3 +1,4 @@
+examples/simple/build
 examples/ada
 node_modules-from-s3
 node_modules

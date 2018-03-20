@@ -1,3 +1,5 @@
+import { log } from './logging';
+
 export const CSS = /.css$/;
 export const JS = /.js$/;
 
@@ -17,7 +19,7 @@ export const getChunkFiles = (publicPath, chunks) => { // eslint-disable-line
 
 export function getChunksFromManifest(clientPublicPath, manifest) {
   return Object.values(manifest).reduce((files, chunk) => {
-    const filePath = clientPublicPath + chunk;
+    const filePath = chunk;
 
     if (CSS.test(filePath)) {
       files.css.push(filePath);
@@ -29,9 +31,19 @@ export function getChunksFromManifest(clientPublicPath, manifest) {
   }, { js: [], css: [] });
 }
 
-export const resolveConfig = (config, file) => (
-  config ||
+export const resolveConfig = file => (
   require(file).default || // eslint-disable-line
   require(file) //eslint-disable-line
 );
 
+export const loadCustomizations = path => { // eslint-disable-line
+  let customConfig;
+  try {
+    log('checking for custom ssr3000.config.js');
+    customConfig = resolveConfig(path);
+    log('custom config found.');
+  } catch (e) {
+    log('no custom config specified.');
+  }
+  return customConfig;
+};

@@ -1,8 +1,9 @@
 import webpack from 'webpack';
 import { buildTime, info, success } from './utils/logging';
 import constants from './constants';
-import { resolveConfig } from './utils/webpack';
-
+import { loadCustomizations } from './utils/webpack';
+import defaultClientConfig from './webpack/client.prod.config';
+import defaultServerConfig from './webpack/server.prod.config';
 
 function compile(config) {
   return new Promise((resolve, reject) => {
@@ -16,13 +17,31 @@ function compile(config) {
   });
 }
 
-const build = (cConfig, sConfig) => {
-  const clientConfig = resolveConfig(cConfig, constants.clientProdConfigPath);
-  const serverConfig = resolveConfig(sConfig, constants.serverProdConfigPath);
+const build = () => {
+  const customConfig = loadCustomizations(constants.configPath);
+
+  const customClientConfig = customConfig && customConfig(
+    defaultClientConfig,
+    {
+      isServer: false,
+    },
+  );
+
+  const customServerConfig = customConfig && customConfig(
+    defaultServerConfig,
+    {
+      isServer: true,
+    },
+  );
+
+  const clientConfig = customClientConfig || defaultClientConfig;
+  const serverConfig = customServerConfig || defaultServerConfig;
+
   if (!clientConfig || !serverConfig) {
     console.error('error loading config files');
     process.exit(1);
   }
+
   info('start client build');
   compile(clientConfig).then((stats) => {
     success(`client webpack build time ${buildTime(stats)}ms`);
