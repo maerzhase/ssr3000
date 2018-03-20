@@ -1,5 +1,6 @@
 examples/simple/build
 examples/ada
+examples/m3000
 node_modules-from-s3
 node_modules
 build
