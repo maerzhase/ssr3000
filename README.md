@@ -15,7 +15,7 @@ If you need to customize the `webpack` configuration you can do that with the [`
 
 ## Getting started
 
-  1. `npm install --save ssr3000 express lodash.template react react-dom react-hot-loader`
+  1. `npm install --save ssr3000 react react-dom react-hot-loader express lodash.template `
 
   2. add scripts to your package.json
 
