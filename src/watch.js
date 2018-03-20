@@ -5,11 +5,29 @@ import clientCompiler from './compiler/client';
 import serverCompiler from './compiler/server';
 import { errorBanner, log } from './utils/logging';
 import constants from './constants';
-import { resolveConfig } from './utils/webpack';
+import { loadCustomizations } from './utils/webpack';
+import defaultClientConfig from './webpack/client.config';
+import defaultServerConfig from './webpack/server.config';
 
-const watch = (host, port, cConfig, sConfig) => {
-  const clientConfig = resolveConfig(cConfig, constants.clientConfigPath);
-  const serverConfig = resolveConfig(sConfig, constants.serverConfigPath);
+const watch = (host, port) => {
+  const customConfig = loadCustomizations(constants.configPath);
+
+  const customClientConfig = customConfig && customConfig(
+    defaultClientConfig,
+    {
+      isServer: false,
+    },
+  );
+
+  const customServerConfig = customConfig && customConfig(
+    defaultServerConfig,
+    {
+      isServer: true,
+    },
+  );
+
+  const clientConfig = customClientConfig || defaultClientConfig;
+  const serverConfig = customServerConfig || defaultServerConfig;
   if (!clientConfig || !serverConfig) {
     errorBanner('error loading config files');
     process.exit(1);
@@ -25,7 +43,7 @@ const watch = (host, port, cConfig, sConfig) => {
   let serverReady = false;
 
   app.use(ClientCompiler.devMiddleware);
-  if (constants.config.hot) app.use(ClientCompiler.hotMiddleware);
+  app.use(ClientCompiler.hotMiddleware);
   app.use(ServerCompiler.middleware);
 
   const reportValidity = () => {
@@ -53,7 +71,6 @@ const watch = (host, port, cConfig, sConfig) => {
     clientReady = true;
     reportValidity();
   });
-
 
   console.log();
   log(chalk.gray('waiting for server and client bundle'));

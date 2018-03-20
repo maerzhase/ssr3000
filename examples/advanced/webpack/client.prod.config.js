@@ -3,6 +3,7 @@ var path = require('path');
 var CleanWebpackPlugin = require('clean-webpack-plugin');
 var webpack = require('webpack');
 var ManifestPlugin = require('webpack-manifest-plugin');
+var HtmlWebpackPlugin = require('html-webpack-plugin')
 
 var CLIENT_MANIFEST_FILE_NAME = 'manifest.json';
 
@@ -18,6 +19,7 @@ var JS_INCLUDES = [
 ];
 
 module.exports = {
+  mode: 'production',
   entry: [
     APP_ENTRY,
   ],
@@ -60,23 +62,13 @@ module.exports = {
       minimize: true,
       debug: false,
     }),
-    new webpack.optimize.UglifyJsPlugin({
-      compress: {
-        screw_ie8: true, // React doesn't support IE8
-        warnings: false,
-        comparisons: false,  // don't optimize comparisons
-      },
-      mangle: {
-        screw_ie8: true,
-      },
-      output: {
-        comments: false,
-        screw_ie8: true,
-      },
-      sourceMap: true,
-    }),
     new ManifestPlugin({
       fileName: CLIENT_MANIFEST_FILE_NAME,
+    }),
+    new HtmlWebpackPlugin({
+      title: 'm3000',
+      showErrors: true,
+      fileName: path.join(BUILD_PATH, 'index.html'),
     }),
   ],
   devtool: 'source-map',

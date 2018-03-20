@@ -1,89 +1,152 @@
 # SSR3000
 
-A simple serverside rendering framework for react applications. build with [express](https://github.com/expressjs/express) and [webpack](https://github.com/webpack/webpack).
+A simple serverside rendering framework for react applications. build with [express](https://github.com/expressjs/express) and [webpack >= 4.0.0](https://github.com/webpack/webpack).
 
 
 ## The idea
 
 SSR3000 is build around the principle of having two different entry files for your application:
 - The __client entry__, which usually calls `React.render` or `React.hydrate`
-- The __server entry__, that handles requests and decides how content get's rendered to the client
+- The __server entry__, that handles requests and serves a response to the client
 
-### client entry file
-A typical __client entry__ file will look similar to this:
+SSR3000 comes with a default webpack configuration that takes away the pain of setting up `webpack`. 
+If you need to customize the `webpack` configuration you can do that with the [`ssr3000.config.js`](#ssr3000configjs).
+
+
+## Getting started
+
+  1. `npm install --save ssr3000 express lodash.template react react-dom react-hot-loader`
+
+  2. add scripts to your package.json
+
+```
+{
+  ...
+  scripts: {
+    "watch": "./node_modules/.bin/ssr3000-watch",
+    "build": "./node_modules/.bin/ssr3000-build",
+    "serve": "./node_modules/.bin/ssr3000-serve"
+  },
+  ...
+}
+```
+  3. create a `src` folder
+
+  4. create client entry: `src/main.js`
+
 ```JavaScript
 import React from 'react';
-import { AppContainer } from 'react-hot-loader';
 import { hydrate } from 'react-dom';
 import App from './components/App';
 
 hydrate(
-  <AppContainer>
-      <App />
-  </AppContainer>,
+  <App />,
   document.getElementById('root'),
 );
-
-if (module.hot) {
-  module.hot.accept('./components/App.js', () => {
-    const NextApp = require('./components/App.js').default; // eslint-disable-line
-    hydrate(
-      <AppContainer>
-        <NextApp />
-      </AppContainer>,
-      document.getElementById('root'),
-    );
-  });
-}
-
 ```
 
-SSR3000 uses hot realoading by default. In order to make the hot reloading work we need the if-statement on the bottom [see react-hot-loader](https://github.com/gaearon/react-hot-loader). You can turn off hot loading in the [`.ssr3000rc`](#ssr3000rc)
+  5. create `serverMiddleware` folder
 
-### server entry file
+  6. create html template to serve: `serverMiddleware/index.ejs`
 
-The __server entry__  is an middleware that will be added to the express server. SSR3000 takes care of the webpack bundling in the background and serves the chunk files to your middleware. 
+```
+<html>
+  <head>
+    <title>SSR3000 App</title>
+  </head>
+  <body>
+    <div id="root"><%= app %></div>
+    <% chunks.js.forEach((chunk) => { %><script src="<%= chunk %>"></script><% }); %>
+  </body>
+</html>
+```
+
+  7. create server entry: `serverMiddleware/index.js`
 
 ```JavaScript
 import React from 'react';
 import { renderToString } from 'react-dom/server';
 import { Router } from 'express';
+import compile from 'lodash.template';
+import templateContent from './index.ejs';
 import App from '../components/App';
+
+const template = compile(templateContent);
 
 export default (chunks) => {
   const router = new Router();
-  router.use((req, res, next) => {
+  router.use((req, res) => {
     res.status(200);
-    res.send(`
-      <html>
-        <head>
-          <title>SSR3000 Application</title>
-        </head>
-        <body>
-          <div id="root">
-            ${renderToString(<App/>)}
-          </div>
-          <script src="${chunks.js[0]}"" />
-        </body>
-      </html>
-    `);
+    res.send(template({
+      chunks,
+      app: renderToString(<App />),
+    }));
   });
   return router;
+};
+``` 
+
+  8. create components folder with e.g. `App.js`
+
+```JavaScript
+import React from 'react';
+import { hot } from 'react-hot-loader';
+
+const App = () => (
+  <div>
+    Hello World
+  </div>
+);
+
+export default hot(module)(App);
+```
+SSR3000 uses hot realoading by default when watching your application. See [react-hot-loader](https://github.com/gaearon/react-hot-loader) for more informations.
+
+ 9. `npm run watch`
+
+## ssr3000.config.js
+
+In order to extends the webpack configuration you can define a `ssr3000.config.js` file that exports a function, which returns the modified webpack configuration.
+##### Warning: this file is not going to be transpiled with babel. So you need to write it in vanilla JS and/or features that are supported by your Node.js version
+
+
+```JavaScript
+const customConfig = (config, { isServer }) => {
+  return {
+    ...config,
+  }
+}
+
+module.exports = customConfig;
+
+```
+
+Since we are always configuring webpack for the client and the server, this function will get called twice. Once for the server and once for the client. You can distinguish between them with the isServer parameter.
+
+
+## .ssr3000rc
+
+Use the `.ssr3000rc` to configure SSR3000 for your project. The `.ssr3000rc` files must be a valid JSON file.
+
+```
+{
+  "host": "localhost",
+  "port": 8000
 }
 ```
 
+### Options
+
+| Option                   | Default                              | Description                                           |
+| ------------------------ | ------------------------------------ | ----------------------------------------------------  |
+| `host`                   | `"0.0.0.0"`                          | set the hostname for the server                       |
+| `port`                   | `9999`                               | set the port for the server                           |
+
+
+## ServerMiddleware
+
 It's important to realize that you are responsible for what get's rendered to your client. Without your middleware the server is running but there is no default way of handling responses — therefore without your middleware you will see no output in the browser. It also gives you the greatest flexibilty, because you can provide additional logic e.g. handle routing, serialize inital data to the browser, etc.
 
-
-## Getting started
-
-  1. `npm install --save ssr3000`
-
-  2. Create a [`.ssr3000rc`](#ssr3000rc) file
-  
-  3. Create the [webpack configuration](#a-brief-digression-into-webpack).
-
-Now you are ready to setup your application with the [Node.js API](#nodejs-api) or [Command Line Interface (CLI)](#cli)
 
 ## Node.js API
 
@@ -104,55 +167,49 @@ const SSR3000 = ssr3000();
 ### watch
 
 ```JavaScript
-ssr3000.watch(host, port, clientConfig, serverConfig)
+ssr3000.watch(host, port)
 ```
 
-The watch function starts the SSR3000 server for development. When the first bundle is ready it will notify that a server has been started. If no `host` and/or `port` parameters are provided it will use the defaults from the [`.ssr3000rc`](#ssr3000rc). If no `clientConfig` and/or `serverConfig` parameters are provided the renderer will look for a `webpack.client.config.js` and `webpack.server.config.js` in the folder from where the application is running. You can configure default file paths within your [`.ssr3000rc`](#ssr3000rc).
+The watch function starts the SSR3000 server for development. When the first bundle is ready it will notify that a server has been started. If no `host` and/or `port` parameters are provided it will use the default values (0.0.0.0:9999) or use the values from the [`.ssr3000rc`](#ssr3000rc).
 
 ```JavaScript
 import ssr3000 from 'ssr3000';
-import clientConfig from './webpack.client.config';
-import serverConfig from './webpack.server.config';
 
 const SSR3000 = ssr3000();
 
-SSR3000.watch('0.0.0.0', 9999, clientConfig, serverConfig); 
+SSR3000.watch('0.0.0.0', 9999); 
 ```
 
 ### build
 
 ```JavaScript
-ssr3000.build(clientProductionConfig, serverProductionConfig)
+ssr3000.build()
 ```
 
-The build function will build your application for production. If no `clientProductionConfig` and/or `serverProductionConfig` parameters are provided the renderer will look for a `webpack.client.prod.config.js` and `webpack.server.prod.config.js` in the folder from where the application is running. The process will terminate after the build was successfull. You can configure default file paths within your [`.ssr3000rc`](#ssr3000rc).
+The build function will build your application for production.
 
 ```JavaScript
 import ssr3000 from 'ssr3000';
-import clientProductionConfig from './webpack.client.prod.config';
-import serverProductionConfig from './webpack.server.prod.config';
 
 const SSR3000 = ssr3000();
 
-SSR3000.build(clientProductionConfig, serverProductionConfig);
+SSR3000.build();
 ```
 
 ### serve
 
 ```JavaScript
-ssr3000.serve(host, port, clientProductionConfig, serverProductionConfig)
+ssr3000.serve(host, port)
 ```
 
-The serve function will serve the production build of your application – make sure u have used [ssr3000.build()](#build) before. If no `clientProductionConfig` and/or `serverProductionConfig` parameters are provided the server will look for a `webpack.client.prod.config.js` and `webpack.server.prod.config.js` in the folder from where the application is running. You can configure the default file paths within your [`.ssr3000rc`](#ssr3000rc).
+The serve function will serve the production build of your application – make sure u have used [ssr3000.build()](#build) before. If no `host` and/or `port` parameters are provided it will use the default values (0.0.0.0:9999) or use the values from the [`.ssr3000rc`](#ssr3000rc)..
 
 ```JavaScript
 import ssr3000 from 'ssr3000';
-import clientProductionConfig from './webpack.client.prod.config';
-import serverProductionConfig from './webpack.server.prod.config';
 
 const SSR3000 = ssr3000();
 
-SSR3000.serve('0.0.0.0', 9999, clientProductionConfig, serverProductionConfig);
+SSR3000.serve('0.0.0.0', 9999);
 
 ```
 
@@ -183,41 +240,17 @@ run the production server
 `./node_modules/.bin/ssr3000-serve`
 
 
-## .ssr3000rc
-
-Use the `.ssr3000rc` to configure SSR3000 for your project. The `.ssr3000rc` files must be a valid JSON file.
-
-```
-{
-  "host": "localhost",
-  "port": 8000
-}
-```
-
-### Options
-
-| Option                   | Default                              | Description                                           |
-| ------------------------ | ------------------------------------ | ----------------------------------------------------  |
-| `host`                   | `"0.0.0.0"`                          | set the hostname for the server                       |
-| `port`                   | `9999`                               | set the port for the server                           |
-| `clientConfig`           | `"webpack.client.config"`            | set the path to webpack client config for development |
-| `clientProductionConfig` | `"webpack.client.production.config"` | set the path to webpack client config for production  |
-| `serverConfig`           | `"webpack.server.config"`            | set the path to webpack server config for development |
-| `serverProductionConfig` | `"webpack.server.production.config"` | set the path to webpack server config for production  |
-| `hot`                    | `true`                               | specify if hot loading should be enabled              |
-
-
 ## Examples
 
 see `examples/simple/` for a simple react application setup.
+see `examples/advanced/` for an example with modified webpack config and [`react-jss`](https://github.com/cssinjs/react-jss) for (server-side) styles
 
 
 ### Usage
 
 run `npm install` from within the _examples/simple_ folder
 
-Please note that there are two webpack-configurations (one in the root folder and one in the webpack folder). This is to demonstrate the usage of the [`.ssr3000rc`](#ssr3000rc). The server will also start on a different port and hostname when you use the Node.js API or the CLI (npm commands have `cli:` prefix).
-
+To demonstrate the usage of the `.ssr3000rc` the example comes with commands to use the Node.js API and the CLI (npm commands have `cli:` prefix). You could run both at the same time because CLI and Node.js API start on different ports.
 
 #### Start development server
 
@@ -235,8 +268,8 @@ To start the production server, run `npm run serve` or `npm run cli:serve`
 
 
 ## A brief digression into webpack
-SSR3000 uses weback in the background to bundle your application. You have to provide a webpack configuration that serves the needs of your application. Since we are running a serverside application we need a config for the __client__ and for the __server__.
-
+SSR3000 uses weback in the background to bundle your application. You no longer need to provide your own webpack configuration. SSR3000 aims to have a fully functional configuration made for all purpose. If you want to customize the webpack configuration anyway you can do that with the [`ssr3000.config.js`](#ssr3000configjs). 
+This section is meant to give you an overview of the most important parts of a webpack configuration. If u want to undestand how webpack works in detail please visit the [webpack-website](https://webpack.js.org).
 
 #### Entry
 Set the entry points of your application

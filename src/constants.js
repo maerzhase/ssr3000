@@ -4,24 +4,9 @@ import { loadConfig } from './utils/configuration';
 const constants = () => {
   const config = loadConfig();
 
-  const clientConfigPath = path.join(
+  const configPath = path.join(
     process.cwd(),
-    config.clientConfig,
-  );
-
-  const clientProdConfigPath = path.join(
-    process.cwd(),
-    config.clientProductionConfig,
-  );
-
-  const serverConfigPath = path.join(
-    process.cwd(),
-    config.serverConfig,
-  );
-
-  const serverProdConfigPath = path.join(
-    process.cwd(),
-    config.serverProductionConfig,
+    'ssr3000.config.js',
   );
 
   const host = config.host || '0.0.0.0';
@@ -29,10 +14,7 @@ const constants = () => {
 
   return {
     config,
-    clientConfigPath,
-    clientProdConfigPath,
-    serverConfigPath,
-    serverProdConfigPath,
+    configPath,
     host,
     port,
   };
