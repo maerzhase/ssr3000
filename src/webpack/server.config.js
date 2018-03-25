@@ -2,6 +2,7 @@ import CleanWebpackPlugin from 'clean-webpack-plugin';
 import nodeExternals from 'webpack-node-externals';
 
 import {
+  APP_PATH,
   SERVER_ENTRY,
   SERVER_BUILD_PATH,
   PUBLIC_PATH,
@@ -50,7 +51,10 @@ export default {
     ],
   },
   plugins: [
-    new CleanWebpackPlugin(['build/server']),
+    new CleanWebpackPlugin(
+      [SERVER_BUILD_PATH],
+      { root: APP_PATH },
+    ),
   ],
   devtool: 'cheap-module-eval-source-map',
 };
