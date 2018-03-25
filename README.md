@@ -1,17 +1,23 @@
 # SSR3000
 
-A simple serverside rendering framework for react applications. build with [express](https://github.com/expressjs/express) and [webpack >= 4.0.0](https://github.com/webpack/webpack).
+A simple framework for server-rendered react applications. 
+###### 
+Build with [express](https://github.com/expressjs/express) and [webpack >= 4.0.0](https://github.com/webpack/webpack).
+
+________
 
 
-## The idea
-
-SSR3000 is build around the principle of having two different entry files for your application:
-- The __client entry__, which usually calls `React.render` or `React.hydrate`
-- The __server entry__, that handles requests and serves a response to the client
-
-SSR3000 comes with a default webpack configuration that takes away the pain of setting up `webpack`. 
-If you need to customize the `webpack` configuration you can do that with the [`ssr3000.config.js`](#ssr3000configjs).
-
+- [Getting started](#getting-started)
+- [Serving static assets](#serving-static-assets)
+- [Customizing webpack config](#ssr3000configjs)
+- [Customizing ssr3000](#ssr3000rc)
+- [The idea](#the-idea)
+- [ServerMiddleware](#servermiddleware)
+- [Node.js API](#nodejs-api)
+- [CLI – Command Line Interface](#cli)
+- [Examples](#examples)
+- [A short digression into webpack](#a-short-digression-into-webpack
+)
 
 ## Getting started
 
@@ -30,7 +36,7 @@ If you need to customize the `webpack` configuration you can do that with the [`
   ...
 }
 ```
-  3. create a `src` folder
+  3. create `src`, `src/serverMiddlware` and `src/components` folders
 
   4. create client entry: `src/main.js`
 
@@ -45,9 +51,7 @@ hydrate(
 );
 ```
 
-  5. create `src/serverMiddleware` folder
-
-  6. create html template to serve: `src/serverMiddleware/index.ejs`
+  5. create html template to serve: `src/serverMiddleware/index.ejs`
 
 ```
 <html>
@@ -61,7 +65,7 @@ hydrate(
 </html>
 ```
 
-  7. create server entry: `src/serverMiddleware/index.js`
+  6. create server entry: `src/serverMiddleware/index.js`
 
 ```JavaScript
 import React from 'react';
@@ -86,7 +90,7 @@ export default (chunks) => {
 };
 ``` 
 
-  8. create components folder with e.g. `App.js`
+  7. create your app e.g. `src/components/App.js`
 
 ```JavaScript
 import React from 'react';
@@ -103,6 +107,15 @@ export default hot(module)(App);
 ###### SSR3000 uses hot reloading by default when watching your application. See [react-hot-loader](https://github.com/gaearon/react-hot-loader) for more informations.
 
  9. `npm run watch`
+
+## Serving static assets
+
+SSR3000 comes with a build in solution to serve your static files. Just create folder called `static` inside your project root directory. From within your components you can now reference those files with `/static/` URLs.
+
+```JavaScript
+<img src="/static/cat.jpg" />
+```
+
 
 ## ssr3000.config.js
 
@@ -142,6 +155,14 @@ Use the `.ssr3000rc` to configure SSR3000 for your project. The `.ssr3000rc` fil
 | `host`                   | `"0.0.0.0"`                          | set the hostname for the server                       |
 | `port`                   | `9999`                               | set the port for the server                           |
 
+## The idea
+
+SSR3000 is build around the principle of having two different entry files for your application:
+- The __client entry__, which usually calls `React.render` or `React.hydrate`
+- The __server entry__, that handles requests and serves a response to the client
+
+SSR3000 comes with a default webpack configuration that takes away the pain of setting up `webpack`. 
+If you need to customize the `webpack` configuration you can do that with the [`ssr3000.config.js`](#ssr3000configjs).
 
 ## ServerMiddleware
 
