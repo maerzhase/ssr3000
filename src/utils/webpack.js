@@ -47,3 +47,10 @@ export const loadCustomizations = path => { // eslint-disable-line
   }
   return customConfig;
 };
+
+export const conditionalPlugin = (condition, plugin) => {
+  if (condition) {
+    return [plugin];
+  }
+  return [];
+};
