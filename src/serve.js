@@ -7,6 +7,7 @@ import constants from './constants';
 import { getChunksFromManifest, loadCustomizations } from './utils/webpack';
 import defaultClientConfig from './webpack/client.prod.config';
 import defaultServerConfig from './webpack/server.prod.config';
+import { STATIC_ASSETS_DIR_OUT } from './webpack/constants';
 
 const serve = (host, port) => {
   const customConfig = loadCustomizations(constants.configPath);
@@ -66,6 +67,7 @@ const serve = (host, port) => {
   const app = express();
   app.use(compressionMiddleware());
   app.use(CLIENT_PUBLIC_PATH, express.static(CLIENT_BUILD_PATH));
+  app.use('/static', express.static(STATIC_ASSETS_DIR_OUT));
   app.use(SSRMiddleware(chunks));
   app.listen(PORT, HOST, (err) => {
     if (err) console.error(err);

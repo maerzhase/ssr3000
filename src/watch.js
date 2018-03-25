@@ -8,6 +8,7 @@ import constants from './constants';
 import { loadCustomizations } from './utils/webpack';
 import defaultClientConfig from './webpack/client.config';
 import defaultServerConfig from './webpack/server.config';
+import { STATIC_ASSETS_DIR_OUT } from './webpack/constants';
 
 const watch = (host, port) => {
   const customConfig = loadCustomizations(constants.configPath);
@@ -44,6 +45,7 @@ const watch = (host, port) => {
 
   app.use(ClientCompiler.devMiddleware);
   app.use(ClientCompiler.hotMiddleware);
+  app.use('/static', express.static(STATIC_ASSETS_DIR_OUT));
   app.use(ServerCompiler.middleware);
 
   const reportValidity = () => {
