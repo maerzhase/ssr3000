@@ -9,7 +9,7 @@ export default {
   ...clientConfig,
   mode: 'production',
   plugins: [
-    new CleanWebpackPlugin(['build/client']),
+    ...clientConfig.plugins,
     new webpack.LoaderOptionsPlugin({
       minimize: true,
       debug: false,
