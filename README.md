@@ -106,7 +106,7 @@ export default hot(module)(App);
 ```
 ###### SSR3000 uses hot reloading by default when watching your application. See [react-hot-loader](https://github.com/gaearon/react-hot-loader) for more informations.
 
- 9. `npm run watch`
+ 8. `npm run watch`
 
 ## Serving static assets
 
