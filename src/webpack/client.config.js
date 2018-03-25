@@ -1,5 +1,6 @@
 import CleanWebpackPlugin from 'clean-webpack-plugin';
 import {
+  APP_PATH,
   CLIENT_ENTRY,
   NODE_MODULES_PATH,
   CLIENT_BUILD_PATH,
@@ -48,7 +49,10 @@ export default {
     ],
   },
   plugins: [
-    new CleanWebpackPlugin(['build/client']),
+    new CleanWebpackPlugin(
+      [CLIENT_BUILD_PATH],
+      { root: APP_PATH },
+    ),
   ],
   devtool: 'cheap-module-eval-source-map',
 };
