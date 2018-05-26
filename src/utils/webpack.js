@@ -39,11 +39,11 @@ export const resolveConfig = file => (
 export const loadCustomizations = path => { // eslint-disable-line
   let customConfig;
   try {
-    log('checking for custom ssr3000.config.js');
+    log('trying to load ssr3000.config.js');
     customConfig = resolveConfig(path);
-    log('custom config found.');
+    log('config loaded.');
   } catch (e) {
-    log('no custom config specified.');
+    log('error loading ssr3000.config.js', e);
   }
   return customConfig;
 };
