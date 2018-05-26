@@ -25,7 +25,9 @@ export default {
     publicPath: PUBLIC_PATH,
     libraryTarget: 'commonjs2',
   },
-  externals: [nodeExternals()],
+  externals: [
+    nodeExternals(),
+  ],
   module: {
     rules: [
       {
@@ -38,7 +40,6 @@ export default {
         exclude: /node_modules/,
         loader: 'babel-loader',
         options: {
-          cacheDirectory: true,
           presets: [
             'env',
             'stage-3',
@@ -57,7 +58,16 @@ export default {
   plugins: [
     new CleanWebpackPlugin(
       [SERVER_BUILD_PATH],
-      { root: APP_PATH },
+      {
+        root: APP_PATH,
+      },
+    ),
+    new CleanWebpackPlugin(
+      [STATIC_ASSETS_DIR_OUT],
+      {
+        root: APP_PATH,
+        watch: true,
+      },
     ),
     ...conditionalPlugin(
       fs.existsSync(STATIC_ASSETS_DIR_IN),
@@ -66,8 +76,10 @@ export default {
           from: STATIC_ASSETS_DIR_IN,
           to: STATIC_ASSETS_DIR_OUT,
         },
-      ]),
+      ], {
+        copyUnmodified: true,
+      }),
     ),
   ],
-  devtool: 'cheap-module-eval-source-map',
+  devtool: 'inline-cheap-source-map',
 };
