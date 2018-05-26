@@ -3,9 +3,13 @@ import webpackDevMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
 import { webpackReporter } from '../utils/logging';
 
+const HOT_PATH = '__ssr3000_hot';
+const HOT_TIMEOUT = 20000;
+const HOT_HEARTBEAT = 2500;
+
 export default function clientCompiler(webpackConfig) {
   const hotEntry = [
-    'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000',
+    `webpack-hot-middleware/client?path=/${HOT_PATH}&timeout=${HOT_TIMEOUT}`,
   ];
   const hotPlugins = [
     new webpack.HotModuleReplacementPlugin(),
@@ -39,8 +43,8 @@ export default function clientCompiler(webpackConfig) {
     compiler,
     {
       log: false,
-      path: '/__webpack_hmr',
-      heartbeat: 2500,
+      path: `/${HOT_PATH}`,
+      heartbeat: HOT_HEARTBEAT,
     },
   );
 
