@@ -1,4 +1,3 @@
-import CleanWebpackPlugin from 'clean-webpack-plugin';
 import webpack from 'webpack';
 import ManifestPlugin from 'webpack-manifest-plugin';
 import clientConfig from './client.config';
