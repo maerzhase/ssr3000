@@ -37,6 +37,7 @@ export default function clientCompiler(webpackConfig) {
       noInfo: true,
       logLevel: 'silent',
       serverSideRender: true,
+      writeToDisk: true,
     },
   );
   const hotMiddleware = webpackHotMiddleware(
