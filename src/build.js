@@ -1,7 +1,7 @@
 import webpack from 'webpack';
 import { buildTime, info, success } from './utils/logging';
 import constants from './constants';
-import { loadCustomizations } from './utils/webpack';
+import { loadCustomizations } from './webpack/utils';
 import defaultClientConfig from './webpack/client.prod.config';
 import defaultServerConfig from './webpack/server.prod.config';
 

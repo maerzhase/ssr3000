@@ -1,4 +1,6 @@
-import { log } from './logging';
+import path from 'path';
+import { log } from '../utils/logging';
+import { EXTERNAL_LIBS, SSR3000_LIB } from './constants';
 
 export const CSS = /.css$/;
 export const JS = /.js$/;
@@ -54,3 +56,20 @@ export const conditionalPlugin = (condition, plugin) => {
   }
   return [];
 };
+
+export const sortExternalsToTop = (a, b) => {
+  if (a.indexOf(EXTERNAL_LIBS) > -1) return -1;
+  if (b.indexOf(EXTERNAL_LIBS) > -1) return 1;
+  return 0;
+};
+
+export const getBuildFiles = (entries, BUILD_PATH) => (
+  Object.keys(entries).reduce((acc, key) => {
+    acc[key] = path.join(
+      BUILD_PATH,
+      `${SSR3000_LIB}.${key}.js`,
+    );
+    return acc;
+  }, {})
+);
+

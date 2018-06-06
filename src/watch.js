@@ -1,11 +1,11 @@
 import express from 'express';
 import moment from 'moment';
 import chalk from 'chalk';
-import clientCompiler from './compiler/client';
-import serverCompiler from './compiler/server';
+import clientCompiler from './client/compiler';
+import serverCompiler from './server/compiler';
 import { errorBanner, log } from './utils/logging';
 import constants from './constants';
-import { loadCustomizations } from './utils/webpack';
+import { loadCustomizations } from './webpack/utils';
 import defaultClientConfig from './webpack/client.config';
 import defaultServerConfig from './webpack/server.config';
 import { STATIC_ASSETS_DIR_OUT } from './webpack/constants';

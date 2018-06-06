@@ -4,10 +4,18 @@ import chalk from 'chalk';
 import compressionMiddleware from 'compression';
 import { log } from './utils/logging';
 import constants from './constants';
-import { getChunksFromManifest, loadCustomizations } from './utils/webpack';
+import {
+  getChunksFromManifest,
+  loadCustomizations,
+  getBuildFiles,
+} from './webpack/utils';
 import defaultClientConfig from './webpack/client.prod.config';
 import defaultServerConfig from './webpack/server.prod.config';
-import { STATIC_ASSETS_DIR_OUT } from './webpack/constants';
+import {
+  STATIC_ASSETS_DIR_OUT,
+  SERVER_MIDDLEWARE,
+  APP_NAME,
+} from './webpack/constants';
 
 const serve = (host, port) => {
   const customConfig = loadCustomizations(constants.configPath);
@@ -39,10 +47,7 @@ const serve = (host, port) => {
     publicPath: SERVER_PUBLIC_PATH, // eslint-disable-line
   } = serverConfig.output;
 
-  const SERVER_BUILD_FILE_PATH = path.join(
-    SERVER_BUILD_PATH,
-    SERVER_BUILD_FILE,
-  );
+  const BUILD_FILES = getBuildFiles(serverConfig.entry, SERVER_BUILD_PATH);
 
   const {
     path: CLIENT_BUILD_PATH,
@@ -55,7 +60,8 @@ const serve = (host, port) => {
   const HOST = host || constants.host;
   const PORT = port || constants.port;
   const manifest = require(CLIENT_MANIFEST_PATH); // eslint-disable-line 
-  const { default: SSRMiddleware } = require(SERVER_BUILD_FILE_PATH); // eslint-disable-line 
+  const { default: SSRMiddleware } = require(BUILD_FILES[SERVER_MIDDLEWARE]); // eslint-disable-line 
+  const { default: App } = require(BUILD_FILES[APP_NAME]); // eslint-disable-line
   /*
    * Retrieve all relevant JS + CSS Files
    * from Mainfest with public path appended
@@ -68,7 +74,7 @@ const serve = (host, port) => {
   app.use(compressionMiddleware());
   app.use(CLIENT_PUBLIC_PATH, express.static(CLIENT_BUILD_PATH));
   app.use('/static', express.static(STATIC_ASSETS_DIR_OUT));
-  app.use(SSRMiddleware(chunks));
+  app.use(SSRMiddleware(chunks, App));
   app.listen(PORT, HOST, (err) => {
     if (err) console.error(err);
     log(chalk.yellow('serving production build'), chalk.bgYellow.black(`${HOST}:${PORT}`));

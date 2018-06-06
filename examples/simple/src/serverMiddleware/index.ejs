@@ -1,9 +1,0 @@
-<html>
-  <head>
-    <title>SSR3000 App</title>
-  </head>
-  <body>
-    <div id="root"><%= app %></div>
-    <% chunks.js.forEach((chunk) => { %><script src="<%= chunk %>"></script><% }); %>
-  </body>
-</html>

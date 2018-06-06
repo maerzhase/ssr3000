@@ -1,6 +1,7 @@
 # SSR3000
 
-A simple framework for server-rendered react applications. 
+A simple framework for server-rendered react applications.
+
 ###### 
 Build with [express](https://github.com/expressjs/express) and [webpack >= 4.0.0](https://github.com/webpack/webpack).
 

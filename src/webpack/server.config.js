@@ -2,26 +2,32 @@ import fs from 'fs';
 import CleanWebpackPlugin from 'clean-webpack-plugin';
 import nodeExternals from 'webpack-node-externals';
 import CopyWebpackPlugin from 'copy-webpack-plugin';
-import { conditionalPlugin } from '../utils/webpack';
+import { conditionalPlugin } from '../webpack/utils';
 import {
   APP_PATH,
-  SERVER_ENTRY,
+  APP_ENTRY,
   SERVER_BUILD_PATH,
   PUBLIC_PATH,
   JS_INCLUDES,
   STATIC_ASSETS_DIR_IN,
   STATIC_ASSETS_DIR_OUT,
+  SSR3000_DEFAULT_SERVER,
+  SSR3000_LIB,
+  SERVER_MIDDLEWARE,
+  APP_NAME,
 } from './constants';
 
 export default {
   mode: 'development',
   target: 'node',
-  entry: [
-    SERVER_ENTRY,
-  ],
+  entry: {
+    [SERVER_MIDDLEWARE]: SSR3000_DEFAULT_SERVER,
+    [APP_NAME]: APP_ENTRY,
+  },
   output: {
+    library: [SSR3000_LIB, '[name]'],
     path: SERVER_BUILD_PATH,
-    filename: 'bundle.js',
+    filename: `${SSR3000_LIB}.[name].js`,
     publicPath: PUBLIC_PATH,
     libraryTarget: 'commonjs2',
   },
