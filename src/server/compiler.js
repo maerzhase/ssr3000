@@ -5,9 +5,9 @@ import {
   getBuildFiles,
 } from '../webpack/utils';
 import {
-  SERVER_MIDDLEWARE,
   APP_NAME,
 } from '../webpack/constants';
+import SSRMiddleware from './middleware';
 
 export default function serverCompiler(webpackConfig) {
   const {
@@ -41,7 +41,6 @@ export default function serverCompiler(webpackConfig) {
       });
     },
     middleware: (req, res, next) => {
-      const { default: SSRMiddleware } = require(BUILD_FILES[SERVER_MIDDLEWARE]); // eslint-disable-line
       const { webpackStats: stats } = res.locals;
       let { chunks } = stats.toJson();
       chunks = getChunkFiles(PUBLIC_PATH, chunks);

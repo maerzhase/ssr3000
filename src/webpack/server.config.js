@@ -21,7 +21,6 @@ export default {
   mode: 'development',
   target: 'node',
   entry: {
-    [SERVER_MIDDLEWARE]: SSR3000_DEFAULT_SERVER,
     [APP_NAME]: APP_ENTRY,
   },
   output: {

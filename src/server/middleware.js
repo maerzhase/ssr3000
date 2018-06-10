@@ -2,10 +2,6 @@ import React from 'react';
 import { renderToString } from 'react-dom/server';
 import { Router } from 'express';
 import doc from './document';
-// import compile from 'lodash.template';
-// import templateContent from './index.ejs';
-
-// const template = compile(templateContent);
 
 export default (chunks, App) => {
   const router = new Router();
