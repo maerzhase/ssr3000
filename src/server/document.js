@@ -1,29 +1,21 @@
 import React, { Component } from 'react';
-import SSR3000Script from './SSR3000Script';
+import SSR3000Script, { SSR3000Head, SSR3000Main } from './SSR3000Script';
 
-const doc = (chunks, App) => {
-  const scripts = chunks.map(script => <script key={script} src={script}/>);
-  class Document extends Component {
-    render() {
-      return (
-        <html>
-          <head>
-            {
-              scripts
-            }
-          </head>
-          <body>
-            <div id="root">
-              <App />
-            </div>
-            <SSR3000Script />
-          </body>
-        </html>
-      );
-    }
+class Document extends Component {
+  render() {
+    return (
+      <html>
+        <head>
+          <SSR3000Head />
+        </head>
+        <body>
+          <SSR3000Main />
+          <SSR3000Script />
+        </body>
+      </html>
+    );
   }
-  return Document;
 }
 
-export default doc;
+export default Document;
 

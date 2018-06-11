@@ -54,6 +54,7 @@ export default function clientCompiler(webpackConfig) {
   const hotMiddleware = webpackHotMiddleware(
     compiler,
     {
+      log: false,
       path: `/${HOT_PATH}`,
       heartbeat: HOT_HEARTBEAT,
     },
