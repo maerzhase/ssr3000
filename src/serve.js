@@ -18,24 +18,14 @@ import {
 } from './webpack/constants';
 
 const serve = (host, port) => {
-  const customConfig = loadCustomizations(constants.configPath);
-
-  const customClientConfig = customConfig && customConfig(
+  const {
+    clientConfig,
+    serverConfig,
+  } = loadCustomizations(
+    constants.configPath,
     defaultClientConfig,
-    {
-      isServer: false,
-    },
-  );
-
-  const customServerConfig = customConfig && customConfig(
     defaultServerConfig,
-    {
-      isServer: true,
-    },
   );
-
-  const clientConfig = customClientConfig || defaultClientConfig;
-  const serverConfig = customServerConfig || defaultServerConfig;
 
   if (!clientConfig || !serverConfig) {
     console.error('error loading config files');

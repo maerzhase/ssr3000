@@ -65,6 +65,7 @@ export default {
       [SERVER_BUILD_PATH],
       {
         root: APP_PATH,
+        verbose: false,
       },
     ),
     new CleanWebpackPlugin(

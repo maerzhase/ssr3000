@@ -11,24 +11,15 @@ import defaultServerConfig from './webpack/server.config';
 import { STATIC_ASSETS_DIR_OUT } from './webpack/constants';
 
 const watch = (host, port) => {
-  const customConfig = loadCustomizations(constants.configPath);
-
-  const customClientConfig = customConfig && customConfig(
+  const {
+    clientConfig,
+    serverConfig,
+  } = loadCustomizations(
+    constants.configPath,
     defaultClientConfig,
-    {
-      isServer: false,
-    },
-  );
-
-  const customServerConfig = customConfig && customConfig(
     defaultServerConfig,
-    {
-      isServer: true,
-    },
   );
 
-  const clientConfig = customClientConfig || defaultClientConfig;
-  const serverConfig = customServerConfig || defaultServerConfig;
   if (!clientConfig || !serverConfig) {
     errorBanner('error loading config files');
     process.exit(1);

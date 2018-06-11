@@ -1,3 +1,4 @@
+import fs from 'fs';
 import path from 'path';
 import { log } from '../utils/logging';
 import { EXTERNAL_LIBS, SSR3000_LIB } from './constants';
@@ -38,16 +39,33 @@ export const resolveConfig = file => (
   require(file) //eslint-disable-line
 );
 
-export const loadCustomizations = path => { // eslint-disable-line
+export const loadCustomizations = (path, defaultClientConfig, defaultServerConfig) => { // eslint-disable-line
+  const configs = {
+    clientConfig: defaultClientConfig,
+    serverConfig: defaultServerConfig,
+  };
+  if (!fs.existsSync(path)) return configs;
   let customConfig;
   try {
     log('trying to load ssr3000.config.js');
     customConfig = resolveConfig(path);
+    configs.clientConfig = customConfig(
+      defaultClientConfig,
+      {
+        isServer: false,
+      },
+    );
+    configs.clientConfig = customConfig(
+      defaultServerConfig,
+      {
+        isServer: true,
+      },
+    );
     log('config loaded.');
   } catch (e) {
     log('error loading ssr3000.config.js', e);
   }
-  return customConfig;
+  return configs;
 };
 
 export const conditionalPlugin = (condition, plugin) => {
