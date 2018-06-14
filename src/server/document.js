@@ -49,7 +49,7 @@ export const SSR3000Script = () => (
       SSR3000 => (
         <React.Fragment>
           <script dangerouslySetInnerHTML={{
-            __html: `window.___SRR3000InitialProps = ${JSON.stringify(SSR3000.initialProps)}`
+            __html: `window.___SRR3000InitialProps = ${JSON.stringify(SSR3000.initialProps)};`
           }}/>
           <script dangerouslySetInnerHTML={{
             __html: `window.__SSR3000.render.default(window.__SSR3000.${SSR3000.entry});`
