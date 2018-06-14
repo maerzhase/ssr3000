@@ -36,7 +36,7 @@ export const SSR3000Main = () => (
     {
       SSR3000 => (
         <div id="root">
-          <SSR3000.App/>
+          <SSR3000.App {...SSR3000.initialProps}/>
         </div>
       )
     }
@@ -46,10 +46,16 @@ export const SSR3000Main = () => (
 export const SSR3000Script = () => (
   <SSR3000Context.Consumer>
     {
-      SSR3000 =>
-      <script dangerouslySetInnerHTML={{
-          __html: `window.__SSR3000.render.default(window.__SSR3000.${SSR3000.entry});`
-      }}/>
+      SSR3000 => (
+        <React.Fragment>
+          <script dangerouslySetInnerHTML={{
+            __html: `window.___SRR3000InitialProps = ${JSON.stringify(SSR3000.initialProps)}`
+          }}/>
+          <script dangerouslySetInnerHTML={{
+            __html: `window.__SSR3000.render.default(window.__SSR3000.${SSR3000.entry});`
+          }}/>
+        </React.Fragment>
+      )
     }
   </SSR3000Context.Consumer>
 );

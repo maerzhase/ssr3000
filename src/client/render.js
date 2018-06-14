@@ -3,7 +3,7 @@ import React from 'react';
 
 const render = (App) => {
   ReactDom.hydrate(
-    <App.default />,
+    <App.default {...window.___SRR3000InitialProps} />,
     document.getElementById('root'),
     () => {
     // We don't need the static css any more once

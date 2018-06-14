@@ -1,4 +1,8 @@
 import webpack from 'webpack';
+import React from 'react';
+import { renderToString } from 'react-dom/server';
+import { SSR3000Context } from './context';
+import Document from './document';
 import { webpackReporter } from '../utils/logging';
 import {
   getChunkFiles,
@@ -7,7 +11,6 @@ import {
 import {
   APP_NAME,
 } from '../webpack/constants';
-import SSRMiddleware from './middleware';
 
 export default function serverCompiler(webpackConfig) {
   const {
@@ -15,7 +18,10 @@ export default function serverCompiler(webpackConfig) {
     publicPath: PUBLIC_PATH,
   } = webpackConfig.output;
 
-  const BUILD_FILES = getBuildFiles(webpackConfig.entry, BUILD_PATH);
+  const BUILD_FILES = getBuildFiles(
+    webpackConfig.entry,
+    BUILD_PATH
+  );
 
   const compiler = webpack(webpackConfig);
 
@@ -40,13 +46,29 @@ export default function serverCompiler(webpackConfig) {
         cb(stats);
       });
     },
-    middleware: (req, res, next) => {
+    middleware: async (req, res) => {
       const { webpackStats: stats } = res.locals;
       let { chunks } = stats.toJson();
       chunks = getChunkFiles(PUBLIC_PATH, chunks);
       const { default: App } = require(BUILD_FILES[APP_NAME]); // eslint-disable-line
-      const middleware = SSRMiddleware(chunks, App);
-      middleware(req, res, next);
+      let initialProps = {};
+      if (App.getInitialProps) {
+        initialProps = await App.getInitialProps();
+      }
+      res.status(200)
+        .send(renderToString(
+          <SSR3000Context.Provider
+            value={{
+              entry: 'index',
+              chunks,
+              initialProps,
+              App,
+            }}
+          >
+            <Document />
+          </SSR3000Context.Provider>
+        )
+      );
     },
   };
 }
