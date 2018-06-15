@@ -2,7 +2,7 @@ import webpack from 'webpack';
 import webpackDevMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
 import { webpackReporter } from '../utils/logging';
-import { APP_NAME } from '../webpack/constants';
+import { AVAILABLE_PATHS } from '../webpack/constants';
 
 const HOT_PATH = '__ssr3000_hot';
 const HOT_TIMEOUT = 20000;
@@ -15,7 +15,7 @@ export default function clientCompiler(webpackConfig) {
   ];
 
   const entries = Object.keys(webpackConfig.entry).reduce((acc, key) => {
-    if (key === APP_NAME) {
+    if (AVAILABLE_PATHS.indexOf(key) > -1) {
       acc[key] = [
         hotEntry,
         webpackConfig.entry[key],

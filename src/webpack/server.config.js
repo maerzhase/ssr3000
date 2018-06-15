@@ -5,21 +5,20 @@ import CopyWebpackPlugin from 'copy-webpack-plugin';
 import { conditionalPlugin } from '../webpack/utils';
 import {
   APP_PATH,
-  APP_ENTRY,
   SERVER_BUILD_PATH,
   PUBLIC_PATH,
   JS_INCLUDES,
   STATIC_ASSETS_DIR_IN,
   STATIC_ASSETS_DIR_OUT,
   SSR3000_LIB,
-  APP_NAME,
+  ALL_ENTRIES,
 } from './constants';
 
 export default {
   mode: 'development',
   target: 'node',
   entry: {
-    [APP_NAME]: APP_ENTRY,
+    ...ALL_ENTRIES
   },
   output: {
     library: [SSR3000_LIB, '[name]'],

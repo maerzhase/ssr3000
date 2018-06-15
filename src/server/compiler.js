@@ -1,16 +1,18 @@
 import webpack from 'webpack';
 import React from 'react';
 import { renderToString } from 'react-dom/server';
-import { SSR3000Context } from './context';
+import { SSR3000Provider } from './context';
 import Document from './document';
 import { webpackReporter } from '../utils/logging';
 import {
   getChunkFiles,
   getBuildFiles,
 } from '../webpack/utils';
-import {
-  APP_NAME,
-} from '../webpack/constants';
+
+const getEntry = (path) => {
+  if (path === '') return 'index';
+  return path;
+}
 
 export default function serverCompiler(webpackConfig) {
   const {
@@ -50,23 +52,25 @@ export default function serverCompiler(webpackConfig) {
       const { webpackStats: stats } = res.locals;
       let { chunks } = stats.toJson();
       chunks = getChunkFiles(PUBLIC_PATH, chunks);
-      const { default: App } = require(BUILD_FILES[APP_NAME]); // eslint-disable-line
+      const entry = getEntry(req.path.substr(1));
+      const { default: App } = require(BUILD_FILES[entry]); // eslint-disable-line
       let initialProps = {};
       if (App.getInitialProps) {
         initialProps = await App.getInitialProps();
       }
       res.status(200)
         .send(renderToString(
-          <SSR3000Context.Provider
+          <SSR3000Provider
             value={{
-              entry: 'index',
+              entry,
               chunks,
               initialProps,
               App,
+              setEntry: () => {},
             }}
           >
             <Document />
-          </SSR3000Context.Provider>
+          </SSR3000Provider>
         )
       );
     },

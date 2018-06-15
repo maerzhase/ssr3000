@@ -9,7 +9,7 @@ import {
   SSR3000_LIB,
   SRR3000_DEFAULT_RENDER,
   CLIENT_RENDER,
-  APP_NAME,
+  ALL_ENTRIES,
 } from './constants';
 
 export default {
@@ -17,7 +17,7 @@ export default {
   target: 'web',
   entry: {
     [CLIENT_RENDER]: SRR3000_DEFAULT_RENDER,
-    [APP_NAME]: APP_ENTRY,
+    ...ALL_ENTRIES,
   },
   output: {
     library: [SSR3000_LIB, '[name]'],

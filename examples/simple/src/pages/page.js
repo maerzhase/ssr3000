@@ -1,16 +1,18 @@
 import React from 'react';
-import Link from 'ssr3000/lib/Link';
-import { SSR3000Provider } from 'ssr3000/lib/server/context';
+import PropTypes from 'prop-types';
 
 const fakeApi = () => (
   new Promise(resolve => {
     setTimeout(() => {
-      resolve({ data: 'Index'});
+      resolve({ data: 'Page'});
     }, 2000);
   })
 )
 
-export default class App extends React.Component {
+export default class Page extends React.Component {
+  static propTypes = {
+    data: PropTypes.string.isRequired
+  }
   static async getInitialProps() {
     const data = await fakeApi();
     return data;
@@ -19,8 +21,8 @@ export default class App extends React.Component {
     return (
       <div>
         <h1>{ this.props.data }</h1>
-        <SSR3000Provider><h3><Link href="/page">Page</Link></h3></SSR3000Provider>
-        <img src="/static/cat.jpg" />
+        <h3><a href="/">Index</a></h3>
+        <img style={{maxWidth: '400px'}} src="/static/cat2.jpg" />
       </div>
     );
   }
