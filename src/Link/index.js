@@ -28,12 +28,21 @@ export default class Link extends React.Component {
     return href === '/' ? 'index' : href.substr(1); 
   }
 
-  handleClick = (e) => {
+  handleClick = async (e) => {
     const {
       href,
     } = this.props;
     if (!this.isLocal) return;
     e.preventDefault();
+    const {
+      default: {
+        getInitialProps
+      },
+    } = window.__SSR3000[this.entry];
+    if (getInitialProps) {
+      const props = await getInitialProps();
+      window.___SRR3000InitialProps = props;
+    }
     window.history.pushState({}, href, href);
     window.__SSR3000.render.default(this.entry);
   }

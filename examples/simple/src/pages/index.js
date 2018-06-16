@@ -1,17 +1,10 @@
 import React from 'react';
 import Link from 'ssr3000/lib/Link';
-
-const fakeApi = () => (
-  new Promise(resolve => {
-    setTimeout(() => {
-      resolve({ data: 'Index'});
-    }, 2000);
-  })
-)
+import { fakeApi } from '../api.js';
 
 export default class App extends React.Component {
   static async getInitialProps() {
-    const data = await fakeApi();
+    const data = await fakeApi('Index');
     return data;
   }
   render() {
