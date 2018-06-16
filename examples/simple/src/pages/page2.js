@@ -17,7 +17,6 @@ export default class Page extends React.Component {
       <div>
         <h1>{ this.props.data }</h1>
         <h3><Link href="/">Index</Link></h3>
-        <img style={{maxWidth: '400px'}} src="/static/cat2.jpg" />
       </div>
     );
   }

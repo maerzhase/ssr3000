@@ -1,7 +1,11 @@
 import path from 'path';
 import express from 'express';
 import chalk from 'chalk';
+import React from 'react';
+import { renderToString } from 'react-dom/server';
 import compressionMiddleware from 'compression';
+import { SSR3000Context } from './server/context';
+import Document from './server/document';
 import { log } from './utils/logging';
 import constants from './constants';
 import {
@@ -13,9 +17,12 @@ import defaultClientConfig from './webpack/client.prod.config';
 import defaultServerConfig from './webpack/server.prod.config';
 import {
   STATIC_ASSETS_DIR_OUT,
-  SERVER_MIDDLEWARE,
-  APP_NAME,
 } from './webpack/constants';
+
+const getEntry = (path) => {
+  if (path === '') return 'index';
+  return path;
+}
 
 const serve = (host, port) => {
   const {
@@ -50,8 +57,6 @@ const serve = (host, port) => {
   const HOST = host || constants.host;
   const PORT = port || constants.port;
   const manifest = require(CLIENT_MANIFEST_PATH); // eslint-disable-line 
-  const { default: SSRMiddleware } = require(BUILD_FILES[SERVER_MIDDLEWARE]); // eslint-disable-line 
-  const { default: App } = require(BUILD_FILES[APP_NAME]); // eslint-disable-line
   /*
    * Retrieve all relevant JS + CSS Files
    * from Mainfest with public path appended
@@ -64,7 +69,32 @@ const serve = (host, port) => {
   app.use(compressionMiddleware());
   app.use(CLIENT_PUBLIC_PATH, express.static(CLIENT_BUILD_PATH));
   app.use('/static', express.static(STATIC_ASSETS_DIR_OUT));
-  app.use(SSRMiddleware(chunks, App));
+  app.use( async (req, res, next) => {
+    const entry = getEntry(req.path.substr(1));
+    const BUILD_FILE = BUILD_FILES[entry];
+    if (!BUILD_FILE) {
+      return next();
+    }
+    const { default: App } = require(BUILD_FILES[entry]); // eslint-disable-line
+    let initialProps = {};
+    if (App.getInitialProps) {
+      initialProps = await App.getInitialProps();
+    }
+    res.status(200)
+      .send(renderToString(
+        <SSR3000Context.Provider
+          value={{
+            entry,
+            chunks,
+            initialProps,
+            App,
+          }}
+        >
+          <Document />
+        </SSR3000Context.Provider>
+      )
+    );
+  });
   app.listen(PORT, HOST, (err) => {
     if (err) console.error(err);
     log(chalk.yellow('serving production build'), chalk.bgYellow.black(`${HOST}:${PORT}`));
