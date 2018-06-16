@@ -18,14 +18,16 @@ export default class Link extends React.Component {
     } = this.props;
     const url = parse(href);
     const origin = parse(window.location.origin);
-    return !url.host || (url.protocol === origin && url.host === origin.host);
+    return !url.host ||
+      (url.protocol === origin.protocol && url.host === origin.host);
   }
 
   get entry() {
     const {
       href,
     } = this.props;
-    return href === '/' ? 'index' : href.substr(1); 
+    const url = parse(href);
+    return url.pathname === '/' ? 'index' : url.pathname.substr(1); 
   }
 
   handleClick = async (e) => {

@@ -11,7 +11,7 @@ export default class App extends React.Component {
     return (
       <div>
         <h1>{ this.props.data }</h1>
-        <h3><Link href="/page">Page</Link></h3>
+        <h3><Link href="http://localhost:2222/page?asd=asd">Page</Link></h3>
         <img src="/static/cat.jpg" />
       </div>
     );
