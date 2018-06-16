@@ -1,7 +1,7 @@
 import webpack from 'webpack';
 import React from 'react';
 import { renderToString } from 'react-dom/server';
-import { SSR3000Provider } from './context';
+import { SSR3000Context } from './context';
 import Document from './document';
 import { webpackReporter } from '../utils/logging';
 import {
@@ -48,11 +48,15 @@ export default function serverCompiler(webpackConfig) {
         cb(stats);
       });
     },
-    middleware: async (req, res) => {
+    middleware: async (req, res, next) => {
       const { webpackStats: stats } = res.locals;
       let { chunks } = stats.toJson();
       chunks = getChunkFiles(PUBLIC_PATH, chunks);
       const entry = getEntry(req.path.substr(1));
+      const BUILD_FILE = BUILD_FILES[entry];
+      if (!BUILD_FILE) {
+        return next();
+      }
       const { default: App } = require(BUILD_FILES[entry]); // eslint-disable-line
       let initialProps = {};
       if (App.getInitialProps) {
@@ -60,17 +64,16 @@ export default function serverCompiler(webpackConfig) {
       }
       res.status(200)
         .send(renderToString(
-          <SSR3000Provider
+          <SSR3000Context.Provider
             value={{
               entry,
               chunks,
               initialProps,
               App,
-              setEntry: () => {},
             }}
           >
             <Document />
-          </SSR3000Provider>
+          </SSR3000Context.Provider>
         )
       );
     },
