@@ -3,6 +3,15 @@ import PropTypes from 'prop-types';
 import { parse } from 'url';
 import { SSR3000Context } from '../server/context';
 
+const injectScript = async (entry) => {
+  return new Promise((resolve) => {
+    const script = document.createElement('script');
+    script.src = `/static/__SSR3000.${entry}.js`;
+    document.body.appendChild(script);
+    resolve();    
+  })
+}
+
 export default class Link extends React.Component {
   static propTypes = {
     children: PropTypes.oneOfType([
@@ -45,6 +54,7 @@ export default class Link extends React.Component {
       const props = await getInitialProps();
       window.___SRR3000InitialProps = props;
     }
+    await injectScript(this.entry);
     window.history.pushState({}, href, href);
     window.__SSR3000.render.default(this.entry);
   }

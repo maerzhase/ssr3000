@@ -9,7 +9,7 @@ const HOT_TIMEOUT = 20000;
 const HOT_HEARTBEAT = 2500;
 
 export default function clientCompiler(webpackConfig) {
-  const hotEntry = `webpack-hot-middleware/client?path=/${HOT_PATH}&timeout=${HOT_TIMEOUT}`;
+  const hotEntry = name => `webpack-hot-middleware/client?path=/${HOT_PATH}&timeout=${HOT_TIMEOUT}&name=${name}&noInfo=true&reload=true`;
   const hotPlugins = [
     new webpack.HotModuleReplacementPlugin(),
   ];
@@ -17,7 +17,7 @@ export default function clientCompiler(webpackConfig) {
   const entries = Object.keys(webpackConfig.entry).reduce((acc, key) => {
     if (AVAILABLE_PATHS.indexOf(key) > -1) {
       acc[key] = [
-        hotEntry,
+        hotEntry(key),
         webpackConfig.entry[key],
       ];
     } else {
