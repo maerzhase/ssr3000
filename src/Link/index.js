@@ -5,10 +5,13 @@ import { SSR3000Context } from '../server/context';
 
 const injectScript = async (entry) => {
   return new Promise((resolve) => {
-    const script = document.createElement('script');
-    script.src = `/static/__SSR3000.${entry}.js`;
+    const src = `/static/__SSR3000.${entry}.js`;
+    let script = document.querySelector(`[src="${src}"]`);
+    if (script) return resolve();
+    script = document.createElement('script');
+    script.src = src;
+    script.onload = () => resolve();
     document.body.appendChild(script);
-    resolve();    
   })
 }
 
@@ -36,7 +39,7 @@ export default class Link extends React.Component {
       href,
     } = this.props;
     const url = parse(href);
-    return url.pathname === '/' ? 'index' : url.pathname.substr(1); 
+    return url.pathname === '/' ? 'index' : url.pathname.substr(1);
   }
 
   handleClick = async (e) => {
@@ -45,6 +48,7 @@ export default class Link extends React.Component {
     } = this.props;
     if (!this.isLocal) return;
     e.preventDefault();
+    await injectScript(this.entry);
     const {
       default: {
         getInitialProps
@@ -54,7 +58,6 @@ export default class Link extends React.Component {
       const props = await getInitialProps();
       window.___SRR3000InitialProps = props;
     }
-    await injectScript(this.entry);
     window.history.pushState({}, href, href);
     window.__SSR3000.render.default(this.entry);
   }

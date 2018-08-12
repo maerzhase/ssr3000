@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { SSR3000Context } from './context';
-import { sortExternalsToTop } from '../webpack/utils';
+import {
+  sortExternalsToTop,
+  filterEntry,
+} from '../webpack/utils';
 
 export default class Document extends Component {
   render() {
@@ -23,6 +26,7 @@ export const SSR3000Head = () => (
     {
       SSR3000 => SSR3000.chunks.js
         .sort(sortExternalsToTop)
+        .filter(filterEntry(SSR3000.entry))
         .map(s => (
           <script key={s} src={s}/>
         )
