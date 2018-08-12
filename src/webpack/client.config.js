@@ -1,7 +1,6 @@
 import CleanWebpackPlugin from 'clean-webpack-plugin';
 import {
   APP_PATH,
-  APP_ENTRY,
   NODE_MODULES_PATH,
   CLIENT_BUILD_PATH,
   PUBLIC_PATH,
@@ -48,7 +47,7 @@ export default {
         },
       },
       {
-        test: APP_ENTRY,
+        include: JS_INCLUDES,
         loader: 'react-hot-loader-loader',
       },
     ],
