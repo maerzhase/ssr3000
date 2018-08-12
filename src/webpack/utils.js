@@ -1,7 +1,11 @@
 import fs from 'fs';
 import path from 'path';
 import { log } from '../utils/logging';
-import { EXTERNAL_LIBS, SSR3000_LIB } from './constants';
+import {
+  EXTERNAL_LIBS,
+  CLIENT_RENDER,
+  MAKE_SSR3000_LIB_NAME,
+} from './constants';
 
 export const CSS = /.css$/;
 export const JS = /.js$/;
@@ -33,6 +37,7 @@ export function getChunksFromManifest(clientPublicPath, manifest) {
     return files;
   }, { js: [], css: [] });
 }
+
 
 export const resolveConfig = file => (
   require(file).default || // eslint-disable-line
@@ -81,11 +86,18 @@ export const sortExternalsToTop = (a, b) => {
   return 0;
 };
 
+export const filterEntry = (entry) => (script) => {
+  if (script.includes(MAKE_SSR3000_LIB_NAME(EXTERNAL_LIBS))) return true;
+  if (script.includes(MAKE_SSR3000_LIB_NAME(CLIENT_RENDER))) return true;
+  if (script.includes(MAKE_SSR3000_LIB_NAME(entry))) return true;
+  return false;
+}
+
 export const getBuildFiles = (entries, BUILD_PATH) => (
   Object.keys(entries).reduce((acc, key) => {
     acc[key] = path.join(
       BUILD_PATH,
-      `${SSR3000_LIB}.${key}.js`,
+      MAKE_SSR3000_LIB_NAME(key),
     );
     return acc;
   }, {})
