@@ -22,6 +22,21 @@ export default class Link extends React.Component {
       PropTypes.string,
     ]).isRequired,
     href: PropTypes.string.isRequired,
+    prefetch: PropTypes.bool,
+    preload: PropTypes.bool,
+  }
+
+  static defaultProps = {
+    prefetch: false,
+    preload: false,
+  }
+
+  componentDidMount() {
+    const {
+      preload,
+      prefetch,
+    } = this.props;
+    if (this.isLocal && (prefetch || preload)) injectScript(this.entry);
   }
 
   get isLocal() {
