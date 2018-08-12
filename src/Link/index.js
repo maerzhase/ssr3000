@@ -22,8 +22,8 @@ export default class Link extends React.Component {
       PropTypes.string,
     ]).isRequired,
     href: PropTypes.string.isRequired,
-    prefetch: PropTypes.bool,
-    preload: PropTypes.bool,
+    prefetch: PropTypes.boolean,
+    preload: PropTypes.boolean,
   }
 
   static defaultProps = {
