@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 
 export const SSR3000_LIB = '__SSR3000';
+export const MAKE_SSR3000_LIB_NAME = name => `${SSR3000_LIB}.${name}.js`
 export const EXTERNAL_LIBS = 'vendors';
 export const CLIENT_RENDER = 'render';
 
