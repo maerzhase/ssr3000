@@ -22,8 +22,8 @@ export default class Link extends React.Component {
       PropTypes.string,
     ]).isRequired,
     href: PropTypes.string.isRequired,
-    prefetch: PropTypes.boolean,
-    preload: PropTypes.boolean,
+    prefetch: PropTypes.bool,
+    preload: PropTypes.bool,
   }
 
   static defaultProps = {
@@ -80,6 +80,8 @@ export default class Link extends React.Component {
   render() {
     const {
       children,
+      prefetch,
+      preload,
       ...rest
     } = this.props;
     return (
